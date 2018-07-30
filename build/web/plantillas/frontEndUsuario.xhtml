@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Facelets Template</title>
+    </h:head>
+
+    <h:body>
+        
+        
+        <div id="header">
+            <div id="content_header">
+                <p:graphicImage style="float:left;width: 200px;margin-top:10px; margin-left: 20px;" library="image" name="logo.png"/>
+                <div id="city">
+                    <h:form>
+                        <h:link id="opcionCiudad" style="text-decoration: none;color:#FFFFFF;"> 
+                            Popayán 
+                            <i class="arrow down"></i>
+                        </h:link>
+                        <p:menu overlay="true" trigger="opcionCiudad"  my="left top" at="left bottom">
+                            <p:menuitem value="Cambiar ciudad" outcome="changeCity"/>
+                        </p:menu>
+                    </h:form>
+                </div>
+                <div id="login">
+                    Iniciar sesión
+                </div>
+            </div>
+            <!--<ui:insert name="top">Top</ui:insert>-->
+        </div>
+        <div id="content_main">
+            <div id="content">
+                dafasfasfasd
+            </div>
+        </div>
+        
+        <div id="bottom">
+            
+        </div>
+        
+    </h:body>
+
+</html>
