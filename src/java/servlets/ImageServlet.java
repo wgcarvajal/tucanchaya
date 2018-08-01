@@ -27,6 +27,7 @@ public class ImageServlet extends HttpServlet {
 
             String image = request.getParameter("image");
 		response.setContentType("image/jpeg");
+                
 		String pathToWeb = "/Users/aranda/Desktop/";
 		File f = new File(pathToWeb + "prueba.jpg");
 		BufferedImage bi = ImageIO.read(f);
