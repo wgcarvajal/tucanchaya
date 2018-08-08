@@ -40,4 +40,13 @@ public class CiudadFacade extends AbstractFacade<Ciudad> {
         List<Ciudad> resultList = query.getResultList();
         return resultList;
     }
+    
+    public Ciudad findDefaultCity()
+    {
+        Query query = getEntityManager().createNamedQuery("Ciudad.findDefaultCity");
+        List<Ciudad> resultList = query.getResultList();
+        if(resultList != null && resultList.size() > 0)
+            return resultList.get(0);
+        return null;
+    }
 }

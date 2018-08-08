@@ -30,8 +30,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ciudad.findAll", query = "SELECT c FROM Ciudad c"),
     @NamedQuery(name = "Ciudad.findByCiuId", query = "SELECT c FROM Ciudad c WHERE c.ciuId = :ciuId"),
     @NamedQuery(name = "Ciudad.findByColumn", query = "SELECT c FROM Ciudad c WHERE LOWER(c.ciunombre) LIKE :ciunombre Order by c.ciunombre asc"),
+    @NamedQuery(name = "Ciudad.findDefaultCity", query = "SELECT c FROM Ciudad c WHERE c.ciuPorDefecto = true"),
     @NamedQuery(name = "Ciudad.findByCiunombre", query = "SELECT c FROM Ciudad c WHERE c.ciunombre = :ciunombre")})
 public class Ciudad implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ciuPorDefecto")
+    private boolean ciuPorDefecto;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -96,6 +102,14 @@ public class Ciudad implements Serializable {
     @Override
     public String toString() {
         return "com.tucanchaya.entities.Ciudad[ ciuId=" + ciuId + " ]";
+    }
+
+    public boolean getCiuPorDefecto() {
+        return ciuPorDefecto;
+    }
+
+    public void setCiuPorDefecto(boolean ciuPorDefecto) {
+        this.ciuPorDefecto = ciuPorDefecto;
     }
     
 }

@@ -11,7 +11,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -19,7 +19,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     
     
@@ -31,4 +31,18 @@
 		<servlet-name>ImageServlet</servlet-name>
 		<url-pattern>/image</url-pattern>
 	</servlet-mapping>
+        
+        
+        <filter>
+   <filter-name>Pretty Filter</filter-name>
+   <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
+</filter>
+
+<filter-mapping> 
+   <filter-name>Pretty Filter</filter-name> 
+   <url-pattern>/*</url-pattern> 
+   <dispatcher>FORWARD</dispatcher> 
+   <dispatcher>REQUEST</dispatcher> 
+   <dispatcher>ERROR</dispatcher>
+</filter-mapping>
 </web-app>

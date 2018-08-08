@@ -20,12 +20,12 @@
                 <p:graphicImage style="float:left;width: 200px;margin-top:10px; margin-left: 20px;" library="image" name="logo.png"/>
                 <div id="city">
                     <h:form>
-                        <h:link id="opcionCiudad" style="text-decoration: none;color:#FFFFFF;"> 
-                            Popayán 
+                        <h:link  id="cityOption" style="text-decoration: none;color:#FFFFFF;"> 
+                            <p:outputLabel value="#{centroDeportivoController.city.ciunombre}"/> 
                             <i class="arrow down"></i>
                         </h:link>
-                        <p:menu overlay="true" trigger="opcionCiudad"  my="left top" at="left bottom">
-                            <p:menuitem value="Cambiar ciudad" outcome="changeCity"/>
+                        <p:menu overlay="true" trigger="cityOption"  my="left top" at="left bottom">
+                            <p:menuitem  value="Cambiar ciudad" outcome="changeCity"/>
                         </p:menu>
                     </h:form>
                 </div>

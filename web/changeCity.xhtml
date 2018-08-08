@@ -36,7 +36,9 @@
             <div class="center_content">
                 <p:dataGrid columns="4"  value="#{cityController.cities}" var="city" rendered="#{cityController.cities.size() > 0}">
                     
-                    <p:commandLink style="text-decoration: none !important;">
+                    <p:commandLink actionListener="#{centroDeportivoController.changeCity(city)}"
+                                   style="text-decoration: none !important;"
+                                   >
                         <div class="ciudad">
                             #{city.ciunombre}
                             <i class="arrow down"></i>

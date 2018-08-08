@@ -6,14 +6,12 @@
 package com.tucanchaya.controller;
 
 import com.tucanchaya.entities.Ciudad;
-import com.tucanchaya.entities.Ciudad_;
 import com.tucanchaya.facade.CiudadFacade;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.primefaces.PrimeFaces;
 
 /**
  *
