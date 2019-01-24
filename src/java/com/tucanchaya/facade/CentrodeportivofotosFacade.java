@@ -5,7 +5,7 @@
  */
 package com.tucanchaya.facade;
 
-import com.tucanchaya.entities.Centrodeportivo;
+import com.tucanchaya.entities.Centrodeportivofotos;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author Wilson carvajal
  */
 @Stateless
-public class CentrodeportivoFacade extends AbstractFacade<Centrodeportivo> {
+public class CentrodeportivofotosFacade extends AbstractFacade<Centrodeportivofotos> {
 
     @PersistenceContext(unitName = "TucanchayaPU")
     private EntityManager em;
@@ -27,27 +27,19 @@ public class CentrodeportivoFacade extends AbstractFacade<Centrodeportivo> {
         return em;
     }
 
-    public CentrodeportivoFacade() {
-        super(Centrodeportivo.class);
+    public CentrodeportivofotosFacade() {
+        super(Centrodeportivofotos.class);
     }
     
-    public List<Centrodeportivo> findByCityOrderByName(Long ciuId)
+    public Centrodeportivofotos findByCenIdDefaultPhoto(Long cenId)
     {
-        Query query = getEntityManager().createNamedQuery("Centrodeportivo.findByCityOrderByColumnName");
-        query.setParameter("ciuId", ciuId);
-        List<Centrodeportivo> resultList = query.getResultList();
-        return resultList;
-    }
-    
-    public Centrodeportivo findByCenId(Long cenId){
-        Query query = getEntityManager().createNamedQuery("Centrodeportivo.findByCenId");
+        Query query = getEntityManager().createNamedQuery("Centrodeportivofotos.findByCenIdDefaultPhoto");
         query.setParameter("cenId", cenId);
-        List<Centrodeportivo> resultList = query.getResultList();
+        List<Centrodeportivofotos> resultList = query.getResultList();
         if(resultList!=null && resultList.size()>0)
         {
             return resultList.get(0);
         }
         return null;
     }
-    
 }

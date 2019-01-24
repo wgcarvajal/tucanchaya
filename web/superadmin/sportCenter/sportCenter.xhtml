@@ -39,13 +39,13 @@
                         </p:row>
                     </p:panelGrid>
                     
-                    <p:dataGrid  var="sportCenter" value="#{sportCenterController.sportCenters}" columns="3" layout="grid"
+                    <p:dataGrid  var="sportCenter" value="#{sportCenterController.sportCenters}" columns="4" layout="grid"
                                 rows="12" paginator="true" id="sportCenters"
                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                 >
                         <p:panel header="#{sportCenter.cenNombre}" style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
-                                
+                                <p:graphicImage width="100%" value="/image?image=#{sportCenterController.getDefaultPhoto(sportCenter.cenId)}" />
 
                                 <h:outputText value="#{sportCenter.cenDireccion}" />
 

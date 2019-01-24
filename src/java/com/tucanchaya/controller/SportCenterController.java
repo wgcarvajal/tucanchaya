@@ -6,8 +6,10 @@
 package com.tucanchaya.controller;
 
 import com.tucanchaya.entities.Centrodeportivo;
+import com.tucanchaya.entities.Centrodeportivofotos;
 import com.tucanchaya.entities.Ciudad;
 import com.tucanchaya.facade.CentrodeportivoFacade;
+import com.tucanchaya.facade.CentrodeportivofotosFacade;
 import com.tucanchaya.facade.CiudadFacade;
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +21,7 @@ import javax.faces.event.ValueChangeEvent;
 
 /**
  *
- * @author aranda
+ * @author Wilson Carvajal
  */
 @ManagedBean(name="sportCenterController")
 @ViewScoped
@@ -30,6 +32,8 @@ public class SportCenterController implements Serializable
     private CentrodeportivoFacade sportCenterEJB;
     @EJB
     private CiudadFacade cityEJB;
+    @EJB
+    private CentrodeportivofotosFacade sportCenterPhotosEJB;
     
     private List<Ciudad> cities;
     private Ciudad city;
@@ -82,4 +86,9 @@ public class SportCenterController implements Serializable
         sportCenters = null;
     }
     
+    public String getDefaultPhoto(Long cenId)
+    {
+        Centrodeportivofotos sportCenterPhoto = sportCenterPhotosEJB.findByCenIdDefaultPhoto(cenId);
+        return sportCenterPhoto.getCenFoNombre();
+    }
 }

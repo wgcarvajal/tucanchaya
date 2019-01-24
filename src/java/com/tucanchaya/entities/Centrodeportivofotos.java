@@ -30,21 +30,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Centrodeportivofotos.findAll", query = "SELECT c FROM Centrodeportivofotos c"),
-    @NamedQuery(name = "Centrodeportivofotos.findByCenfotId", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenfotId = :cenfotId"),
-    @NamedQuery(name = "Centrodeportivofotos.findByCenfoNombre", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenfoNombre = :cenfoNombre")})
+    @NamedQuery(name = "Centrodeportivofotos.findByCenFotId", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenFotId = :cenFotId"),
+    @NamedQuery(name = "Centrodeportivofotos.findByCenFoNombre", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenFoNombre = :cenFoNombre"),
+    @NamedQuery(name = "Centrodeportivofotos.findByCenIdDefaultPhoto", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenId.cenId = :cenId AND c.cenFotPrincipal = TRUE"),
+    @NamedQuery(name = "Centrodeportivofotos.findByCenFotPrincipal", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenFotPrincipal = :cenFotPrincipal")})
 public class Centrodeportivofotos implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "cenfotId")
-    private Long cenfotId;
+    @Column(name = "cenFotId")
+    private Long cenFotId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 40)
-    @Column(name = "cenfoNombre")
-    private String cenfoNombre;
+    @Size(min = 1, max = 200)
+    @Column(name = "cenFoNombre")
+    private String cenFoNombre;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "cenFotPrincipal")
+    private boolean cenFotPrincipal;
     @JoinColumn(name = "cenId", referencedColumnName = "cenId")
     @ManyToOne(optional = false)
     private Centrodeportivo cenId;
@@ -52,29 +58,38 @@ public class Centrodeportivofotos implements Serializable {
     public Centrodeportivofotos() {
     }
 
-    public Centrodeportivofotos(Long cenfotId) {
-        this.cenfotId = cenfotId;
+    public Centrodeportivofotos(Long cenFotId) {
+        this.cenFotId = cenFotId;
     }
 
-    public Centrodeportivofotos(Long cenfotId, String cenfoNombre) {
-        this.cenfotId = cenfotId;
-        this.cenfoNombre = cenfoNombre;
+    public Centrodeportivofotos(Long cenFotId, String cenFoNombre, boolean cenFotPrincipal) {
+        this.cenFotId = cenFotId;
+        this.cenFoNombre = cenFoNombre;
+        this.cenFotPrincipal = cenFotPrincipal;
     }
 
-    public Long getCenfotId() {
-        return cenfotId;
+    public Long getCenFotId() {
+        return cenFotId;
     }
 
-    public void setCenfotId(Long cenfotId) {
-        this.cenfotId = cenfotId;
+    public void setCenFotId(Long cenFotId) {
+        this.cenFotId = cenFotId;
     }
 
-    public String getCenfoNombre() {
-        return cenfoNombre;
+    public String getCenFoNombre() {
+        return cenFoNombre;
     }
 
-    public void setCenfoNombre(String cenfoNombre) {
-        this.cenfoNombre = cenfoNombre;
+    public void setCenFoNombre(String cenFoNombre) {
+        this.cenFoNombre = cenFoNombre;
+    }
+
+    public boolean getCenFotPrincipal() {
+        return cenFotPrincipal;
+    }
+
+    public void setCenFotPrincipal(boolean cenFotPrincipal) {
+        this.cenFotPrincipal = cenFotPrincipal;
     }
 
     public Centrodeportivo getCenId() {
@@ -88,7 +103,7 @@ public class Centrodeportivofotos implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (cenfotId != null ? cenfotId.hashCode() : 0);
+        hash += (cenFotId != null ? cenFotId.hashCode() : 0);
         return hash;
     }
 
@@ -99,7 +114,7 @@ public class Centrodeportivofotos implements Serializable {
             return false;
         }
         Centrodeportivofotos other = (Centrodeportivofotos) object;
-        if ((this.cenfotId == null && other.cenfotId != null) || (this.cenfotId != null && !this.cenfotId.equals(other.cenfotId))) {
+        if ((this.cenFotId == null && other.cenFotId != null) || (this.cenFotId != null && !this.cenFotId.equals(other.cenFotId))) {
             return false;
         }
         return true;
@@ -107,7 +122,7 @@ public class Centrodeportivofotos implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tucanchaya.entities.Centrodeportivofotos[ cenfotId=" + cenfotId + " ]";
+        return "entities.Centrodeportivofotos[ cenFotId=" + cenFotId + " ]";
     }
     
 }
