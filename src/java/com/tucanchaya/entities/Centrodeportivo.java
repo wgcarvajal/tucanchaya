@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Centrodeportivo.findByCenUbicacion", query = "SELECT c FROM Centrodeportivo c WHERE c.cenUbicacion = :cenUbicacion"),
     @NamedQuery(name = "Centrodeportivo.findByCiudad", query = "SELECT c FROM Centrodeportivo c WHERE c.ciuId.ciuId = :ciuId"),
     @NamedQuery(name = "Centrodeportivo.findByColor", query = "SELECT c FROM Centrodeportivo c WHERE c.colorId.colorId = :colorId"),
+    @NamedQuery(name = "Centrodeportivo.findByCityOrderByColumnName", query = "SELECT c FROM Centrodeportivo c WHERE c.ciuId.ciuId = :ciuId Order by c.cenNombre asc"),
     @NamedQuery(name = "Centrodeportivo.findByCenAlto", query = "SELECT c FROM Centrodeportivo c WHERE c.cenAlto = :cenAlto")})
 public class Centrodeportivo implements Serializable {
 

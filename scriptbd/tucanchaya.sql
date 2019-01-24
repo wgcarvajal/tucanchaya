@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 30-07-2018 a las 15:52:44
+-- Tiempo de generación: 24-01-2019 a las 03:02:21
 -- Versión del servidor: 5.7.16
 -- Versión de PHP: 5.6.30
 
@@ -30,13 +30,20 @@ CREATE TABLE `centrodeportivo` (
   `cenId` bigint(20) NOT NULL,
   `ciuId` bigint(20) NOT NULL,
   `colorId` int(11) DEFAULT NULL,
+  `cenNit` varchar(30) DEFAULT NULL,
   `cenNombre` varchar(100) NOT NULL,
   `cenDireccion` varchar(200) DEFAULT NULL,
-  `cenTelefonos` varchar(200) DEFAULT NULL,
   `cenUbicacion` varchar(200) DEFAULT NULL,
   `cenDescripcion` longtext,
   `cenAlto` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `centrodeportivo`
+--
+
+INSERT INTO `centrodeportivo` (`cenId`, `ciuId`, `colorId`, `cenNit`, `cenNombre`, `cenDireccion`, `cenUbicacion`, `cenDescripcion`, `cenAlto`) VALUES
+(3, 12, 1, NULL, 'dfadsfds', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -45,9 +52,23 @@ CREATE TABLE `centrodeportivo` (
 --
 
 CREATE TABLE `centrodeportivofotos` (
-  `cenfotId` bigint(20) NOT NULL,
-  `cenfoNombre` varchar(40) NOT NULL,
-  `cenId` bigint(20) NOT NULL
+  `cenFotId` bigint(20) NOT NULL,
+  `cenId` bigint(20) NOT NULL,
+  `cenFoNombre` varchar(40) NOT NULL,
+  `cenFotPrincipal` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `centrodeportivotelefono`
+--
+
+CREATE TABLE `centrodeportivotelefono` (
+  `cenTelId` int(11) NOT NULL,
+  `cenId` bigint(20) NOT NULL,
+  `cenTelNumero` varchar(20) NOT NULL,
+  `centTelTipo` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -58,23 +79,18 @@ CREATE TABLE `centrodeportivofotos` (
 
 CREATE TABLE `ciudad` (
   `ciuId` bigint(20) NOT NULL,
-  `ciunombre` varchar(100) NOT NULL
+  `ciuNombre` varchar(100) NOT NULL,
+  `ciuPorDefecto` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `ciudad`
 --
 
-INSERT INTO `ciudad` (`ciuId`, `ciunombre`) VALUES
-(1, 'Popayán'),
-(2, 'Neiva'),
-(3, 'Bogota'),
-(4, 'Pitalito'),
-(5, 'Florencia'),
-(6, 'Cali'),
-(7, 'Medellin'),
-(8, 'Armenia'),
-(9, 'Barranquilla');
+INSERT INTO `ciudad` (`ciuId`, `ciuNombre`, `ciuPorDefecto`) VALUES
+(5, 'Neiva', 0),
+(11, 'Pitalito', 0),
+(12, 'Popayán', 1);
 
 -- --------------------------------------------------------
 
@@ -84,9 +100,17 @@ INSERT INTO `ciudad` (`ciuId`, `ciunombre`) VALUES
 
 CREATE TABLE `color` (
   `colorId` int(11) NOT NULL,
-  `colorHexa` varchar(10) NOT NULL,
+  `colorHexadecimal` varchar(10) NOT NULL,
   `colorNombre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `color`
+--
+
+INSERT INTO `color` (`colorId`, `colorHexadecimal`, `colorNombre`) VALUES
+(1, '#0000FF', 'Azul'),
+(6, '#FF0000', 'Rojo');
 
 -- --------------------------------------------------------
 
@@ -106,8 +130,7 @@ CREATE TABLE `grupo` (
 INSERT INTO `grupo` (`gruId`, `gruDescripcion`) VALUES
 ('admin', NULL),
 ('employee', NULL),
-('superAdmin', NULL),
-('user', NULL);
+('superAdmin', NULL);
 
 -- --------------------------------------------------------
 
@@ -155,8 +178,15 @@ ALTER TABLE `centrodeportivo`
 -- Indices de la tabla `centrodeportivofotos`
 --
 ALTER TABLE `centrodeportivofotos`
-  ADD PRIMARY KEY (`cenfotId`),
+  ADD PRIMARY KEY (`cenFotId`),
   ADD KEY `fk_centrodeportivofotos_centrodeportivo` (`cenId`);
+
+--
+-- Indices de la tabla `centrodeportivotelefono`
+--
+ALTER TABLE `centrodeportivotelefono`
+  ADD PRIMARY KEY (`cenTelId`),
+  ADD KEY `fk_centrodeportivo_centrodeportivotelefono` (`cenId`);
 
 --
 -- Indices de la tabla `ciudad`
@@ -200,22 +230,27 @@ ALTER TABLE `usuariogrupo`
 -- AUTO_INCREMENT de la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
-  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivofotos`
 --
 ALTER TABLE `centrodeportivofotos`
-  MODIFY `cenfotId` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `cenFotId` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `centrodeportivotelefono`
+--
+ALTER TABLE `centrodeportivotelefono`
+  MODIFY `cenTelId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `ciuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ciuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `color`
 --
 ALTER TABLE `color`
-  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
@@ -229,14 +264,20 @@ ALTER TABLE `usuario`
 -- Filtros para la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
-  ADD CONSTRAINT `fk_centrodeportivo_ciudad` FOREIGN KEY (`ciuId`) REFERENCES `ciudad` (`ciuId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_centrodeportivo_color` FOREIGN KEY (`colorId`) REFERENCES `color` (`colorId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_centrodeportivo_ciudad` FOREIGN KEY (`ciuId`) REFERENCES `ciudad` (`ciuId`),
+  ADD CONSTRAINT `fk_centrodeportivo_color` FOREIGN KEY (`colorId`) REFERENCES `color` (`colorId`);
 
 --
 -- Filtros para la tabla `centrodeportivofotos`
 --
 ALTER TABLE `centrodeportivofotos`
   ADD CONSTRAINT `fk_centrodeportivofotos_centrodeportivo` FOREIGN KEY (`cenId`) REFERENCES `centrodeportivo` (`cenId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `centrodeportivotelefono`
+--
+ALTER TABLE `centrodeportivotelefono`
+  ADD CONSTRAINT `fk_centrodeportivo_centrodeportivotelefono` FOREIGN KEY (`cenId`) REFERENCES `centrodeportivo` (`cenId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `usuariogrupo`

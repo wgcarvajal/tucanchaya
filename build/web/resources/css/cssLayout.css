@@ -37,6 +37,7 @@
 {
     border: 1px aqua solid;
     width: 100%;
+    min-height: 300px;
 }
 
 #bottom
