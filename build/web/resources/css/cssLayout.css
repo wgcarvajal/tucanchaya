@@ -16,6 +16,17 @@
     height: 100%;
 }
 
+#content_menu{
+    margin: 0 auto;
+    border: 1px blue solid;
+    width: 1250px;
+}
+
+#menu{
+   width: 100%;
+    margin-top: 180px;
+}
+
 #content_main{
     margin: 0 auto;
     border: 1px blue solid;
@@ -26,8 +37,6 @@
 {
     border: 1px aqua solid;
     width: 100%;
-    margin-top: 180px;
-    height: 100px;
 }
 
 #bottom
@@ -44,7 +53,6 @@
     margin-left: 20px;
     font-size: 10pt;
 }
-
 #login
 {
     float: right;
@@ -52,19 +60,3 @@
     margin-right: 20px;
     font-size: 10pt;
 }
-
-i{
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    display: inline-block;
-    padding: 3px;
-}
-
-.down {
-    transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
-}
-
-
-
-

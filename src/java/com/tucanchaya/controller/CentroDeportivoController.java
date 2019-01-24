@@ -18,7 +18,7 @@ import javax.inject.Named;
 
 /**
  *
- * @author aranda
+ * @author wilson carvajal
  */
 @Named("centroDeportivoController")
 @SessionScoped
@@ -41,12 +41,15 @@ public class CentroDeportivoController implements Serializable{
     public void changeCity(Ciudad city)
     {
         this.city = city;
-        
+        returnToIndex();
+    }
+    
+    public void returnToIndex()
+    {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tucanchaya");
         } catch (IOException ex) {
             Logger.getLogger(CentroDeportivoController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 }

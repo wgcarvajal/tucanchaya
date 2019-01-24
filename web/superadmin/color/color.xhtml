@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../../plantillas/frontEndSuperAdmin.xhtml">
+
+            <ui:define name="cssPage">
+                <h:outputStylesheet name="./css/cssColor.css"/>
+            </ui:define>
+
+            <ui:define name="title">
+                Colores
+            </ui:define>
+
+            <ui:define name="content">
+                
+                <h:form onkeypress="if (event.keyCode == 13) { return false; }">
+                <div class="search">
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon"></span>
+                                
+                                <p:inputText  value="#{colorController.color}" placeholder="Busca tu color"
+                                                  >
+                                    <p:ajax event="keyup" listener="#{colorController.searchColor}" update=":formColors" 
+                                                />
+                                    </p:inputText>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </h:form>
+                
+                
+                <h:form id="formColors">
+                    <div class="colorList">
+                        <p:commandButton
+                            action="#{colorController.openRegisterColorDialog}"
+                            icon="fa fa-fw fa-plus" update=":colorForm" 
+                            onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                            />
+                        <p:dataGrid columns="4" 
+                                    value="#{colorController.colors}"
+                                    var="color" 
+                                    rendered="#{colorController.colors.size() > 0}">
+                            <div class="color">
+                                    #{color.colorNombre}
+                                    <div class="remove_button">
+                                        <p:commandLink style="color: black;text-decoration: none !important;"
+                                                       action="#{colorController.openDeleteColorDialog(color)}"
+                                                       update=":deleteColorForm" 
+                                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-trash"></i>
+                                        </p:commandLink>
+                                    </div>
+                                    <div class="edit_button">
+                                        <p:commandLink title="editar"  style="color: black;text-decoration: none !important;"
+                                                       action="#{colorController.openEditarColorDialog(color)}"
+                                                       update=":editColorForm" 
+                                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-edit"></i>
+                                        </p:commandLink>
+                                    </div>
+                                    <div class="colorBox" style="background-color: #{color.colorHexadecimal} ;">
+                                        
+                                    </div>
+                                    
+                            </div>
+                        </p:dataGrid>
+                    </div>
+                </h:form>
+                <h:form id="colorForm">
+                    <p:dialog resizable="false"   header="Color" position="center" modal="true"  widgetVar="addColorDialog" >
+
+                        <p:messages closable="true" showDetail="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:panelGrid id="colorPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText  value="#{colorController.nombre}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="codigo:(#000000)" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText  value="#{colorController.hexadecimal}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton action="#{colorController.saveColor}"
+                                        value="Registrar" update=":formColors"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>        
+
+                    </p:dialog>
+                </h:form>
+                
+                <h:form id="editColorForm">
+                    <p:dialog resizable="false"   header="Color" position="center" modal="true"  widgetVar="editColorDialog" >
+
+                        <p:messages closable="true" showDetail="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:panelGrid id="editColorPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="firstname" value="#{colorController.nombre}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="codigo:(#000000)" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText  value="#{colorController.hexadecimal}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton 
+                                        value="Editar" update=":formColors" action="#{colorController.editColor}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>        
+
+                    </p:dialog>
+                </h:form>
+                <h:form id="deleteColorForm">
+                    <p:dialog resizable="false"   header="Ciudad" position="center" modal="true"  widgetVar="deteletColorDialog" >
+                        
+                        <p:panelGrid id="deleteColorPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column>
+                                    <p:messages id="deleteMessage" showDetail="true" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: center;">
+                                    <p:commandButton 
+                                        action="#{colorController.deleteColor}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        update=":formColors"
+                                        value="Aceptar"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="deleteColorResult">
+                    <p:dialog resizable="false"   header="Ciudad" position="center" modal="true"  widgetVar="deteletColorResultDialog" >
+                        
+                        <p:panelGrid id="deleteColorResultPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column>
+                                    <p:messages showDetail="true" >
+                                        <p:autoUpdate/>
+                                    </p:messages>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: center;">
+                                    <p:commandButton
+                                        value="Aceptar"
+                                        onclick="PF('deteletColorResultDialog').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

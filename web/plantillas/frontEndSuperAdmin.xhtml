@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <ui:insert name="cssPage">css</ui:insert>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
+        <title><ui:insert name="title">title</ui:insert></title>
+    </h:head>
+
+    <h:body>
+        
+        <h:form>
+            <div id="header">
+            <div id="content_header">
+                <p:commandLink action="#{centroDeportivoController.returnToIndex}">
+                    <p:graphicImage style="float:left;width: 200px;margin-top:10px; margin-left: 20px;" 
+                                    library="image" 
+                                    name="logo.png"/>
+                </p:commandLink>
+            </div>
+        </div>
+        </h:form>
+        
+        <div id="content_menu">
+            <div id="menu">
+                <h:form>
+                    <p:tabMenu>
+                        <p:menuitem value="Inicio" 
+                                    outcome="/superadmin/superAdminIndex"
+                                    />
+                        <p:menuitem value="Centros deportivos"
+                                    outcome="/superadmin/sportCenter/sportCenter"
+                                    />
+                        <p:menuitem value="Ciudades"
+                                    outcome="/superadmin/city/city"
+                                    />
+                        <p:menuitem value="Colores"
+                                    outcome="/superadmin/color/color"
+                                    />
+                         
+                    </p:tabMenu>
+                </h:form>
+            </div>
+        </div>
+        <div id="content_main">
+            <div id="content">
+                <ui:insert name="content">Content</ui:insert>
+                <ui:include src="/ventanaEfectodeCarga.xhtml"/>
+            </div>
+        </div>
+        
+        <div id="bottom">
+            
+        </div>
+        
+    </h:body>
+
+</html>
+

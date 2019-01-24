@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -17,7 +18,11 @@
         
         <div id="header">
             <div id="content_header">
-                <p:graphicImage style="float:left;width: 200px;margin-top:10px; margin-left: 20px;" library="image" name="logo.png"/>
+                <p:commandLink action="#{centroDeportivoController.returnToIndex}">
+                    <p:graphicImage style="float:left;width: 200px;margin-top:10px; margin-left: 20px;" 
+                                    library="image" 
+                                    name="logo.png"/>
+                </p:commandLink>
                 <div id="city">
                     <h:form>
                         <h:link  id="cityOption" style="text-decoration: none;color:#FFFFFF;"> 
@@ -30,7 +35,10 @@
                     </h:form>
                 </div>
                 <div id="login">
-                    Iniciar sesión
+                    <p:commandLink style="text-decoration: none !important;color: white;"
+                                   value="Iniciar sesión"
+                                   action="#{sessionUserController.ventanaInicioSession}"
+                                   />
                 </div>
             </div>
             <!--<ui:insert name="top">Top</ui:insert>-->
@@ -44,6 +52,76 @@
         <div id="bottom">
             
         </div>
+        
+        
+        
+        <p:dialog  resizable="false"   header="Iniciar Sesión" position="center" modal="true"  widgetVar="IniciarSesion"  width="450">
+            <h:form id="formularioInicioSession">                
+                <p:messages closable="true"/>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column></p:column>
+                        <p:column></p:column>
+                        <p:column></p:column>                        
+                    </p:row>
+                    <p:row>
+                        <p:column></p:column>
+                        <p:column></p:column>
+                        <p:column></p:column>                        
+                    </p:row>
+                    <p:row>
+                        <p:column style="text-align:right;">
+                            <p:outputLabel  value="Nombre de Usuario:" />
+                            <p:outputLabel style="color:red;"  value=" * " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="firstname" value="#{sessionUserController.nombreDeUsuario}" 
+                                         required="true" label="Firstname" requiredMessage="Ingrese nombre de usuario"/>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="firstname" display="icon" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="text-align:right;">
+                            <p:outputLabel  value="Contraseña:" />
+                            <p:outputLabel style="color:red;"  value=" * " />
+                        </p:column>
+                        <p:column>
+                            <p:password id="contrasena" value="#{sessionUserController.contrasena}" 
+                                        label="Lastname" required="true" requiredMessage="Ingrese una contraseña">
+                                <f:validateLength minimum="6" />
+                                <p:ajax update="msgContrasena" event="keyup" />
+                            </p:password>                          
+                        </p:column>
+                        <p:column>
+                            <p:message for="contrasena" id="msgContrasena" display="icon" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>                                
+                        </p:column>
+                        <p:column>
+                            <p:link  value="¿Has olvidado tu contraseña?">                                
+                            </p:link> 
+                        </p:column>
+                        <p:column>                            
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>                                
+                        </p:column>
+                        <p:column>
+                            <p:commandButton style="background: #22419A;color:#FFFFFF;font-style: italic;font-weight: normal;"
+                                             value="Iniciar Sesión" update="formularioInicioSession" action="#{usuarioSessionController.login()}"
+                                             onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>                                   
+            </h:form>
+            <p:separator/>
+        </p:dialog>     
         
     </h:body>
 

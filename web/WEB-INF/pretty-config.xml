@@ -43,4 +43,30 @@
       </url-mapping> 
       
       
+      <url-mapping id="index"> 
+          <pattern value="/index" /> 
+          <view-id value="/index.xhtml" />
+      </url-mapping> 
+      
+      <url-mapping id="superAdminIndex"> 
+          <pattern value="/sa/index" /> 
+          <view-id value="/superadmin/superAdminIndex.xhtml" />
+      </url-mapping>
+      
+       <url-mapping id="superAdminCity"> 
+          <pattern value="/sa/city" /> 
+          <view-id value="/superadmin/city/city.xhtml" />
+      </url-mapping>  
+      
+      <url-mapping id="superAdminColor"> 
+          <pattern value="/sa/color" /> 
+          <view-id value="/superadmin/color/color.xhtml" />
+      </url-mapping> 
+      
+       <url-mapping id="superAdminSportCenter"> 
+          <pattern value="/sa/centros" /> 
+          <view-id value="/superadmin/sportCenter/sportCenter.xhtml" /> 
+       </url-mapping>
+      
+      
 </pretty-config>

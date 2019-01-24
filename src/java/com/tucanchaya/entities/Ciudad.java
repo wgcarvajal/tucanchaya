@@ -6,7 +6,9 @@
 package com.tucanchaya.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,10 +16,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,6 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ciudad.findDefaultCity", query = "SELECT c FROM Ciudad c WHERE c.ciuPorDefecto = true"),
     @NamedQuery(name = "Ciudad.findByCiunombre", query = "SELECT c FROM Ciudad c WHERE c.ciunombre = :ciunombre")})
 public class Ciudad implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ciuId")
+    private List<Centrodeportivo> centrodeportivoList;
 
     @Basic(optional = false)
     @NotNull
@@ -110,6 +117,15 @@ public class Ciudad implements Serializable {
 
     public void setCiuPorDefecto(boolean ciuPorDefecto) {
         this.ciuPorDefecto = ciuPorDefecto;
+    }
+
+    @XmlTransient
+    public List<Centrodeportivo> getCentrodeportivoList() {
+        return centrodeportivoList;
+    }
+
+    public void setCentrodeportivoList(List<Centrodeportivo> centrodeportivoList) {
+        this.centrodeportivoList = centrodeportivoList;
     }
     
 }

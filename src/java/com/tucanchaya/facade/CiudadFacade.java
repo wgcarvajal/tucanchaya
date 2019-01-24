@@ -49,4 +49,20 @@ public class CiudadFacade extends AbstractFacade<Ciudad> {
             return resultList.get(0);
         return null;
     }
+    
+    public boolean existCity(String name)
+    {
+        Query query = getEntityManager().createNamedQuery("Ciudad.findByCiunombre");
+        query.setParameter("ciunombre",  name);
+        List<Ciudad> resultList = query.getResultList();
+        return resultList!=null && resultList.size()>0;
+    }
+    
+    public boolean isCityUsed(Long id)
+    {
+        Query query = getEntityManager().createNamedQuery("Centrodeportivo.findByCiudad");
+        query.setParameter("ciuId",  id);
+        List<Ciudad> resultList = query.getResultList();
+        return resultList!=null && resultList.size()>0;
+    }
 }
