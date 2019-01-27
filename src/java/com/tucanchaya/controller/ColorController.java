@@ -78,13 +78,7 @@ public class ColorController implements Serializable
     
     public void openRegisterColorDialog()
     {
-       RequestContext requestContext = RequestContext.getCurrentInstance();          
-       FacesContext context = FacesContext.getCurrentInstance();
-       Application application = context.getApplication();
-       ViewHandler viewHandler = application.getViewHandler();
-       UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
-       context.setViewRoot(viewRoot);       
-       context.renderResponse(); 
+       RequestContext requestContext = RequestContext.getCurrentInstance();
        this.nombre = "";
        this.hexadecimal="";
        requestContext.execute("PF('addColorDialog').show()");

@@ -38,11 +38,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Centrodeportivo.findByCenId", query = "SELECT c FROM Centrodeportivo c WHERE c.cenId = :cenId"),
     @NamedQuery(name = "Centrodeportivo.findByCenNombre", query = "SELECT c FROM Centrodeportivo c WHERE c.cenNombre = :cenNombre"),
     @NamedQuery(name = "Centrodeportivo.findByCenDireccion", query = "SELECT c FROM Centrodeportivo c WHERE c.cenDireccion = :cenDireccion"),
-    
+    @NamedQuery(name = "Centrodeportivo.findByCityAndNameOrderByName", query = "SELECT c FROM Centrodeportivo c WHERE c.barId.ciuId.ciuId = :ciuId AND LOWER(c.cenNombre) LIKE :cenNombre Order by c.cenNombre asc"),
     @NamedQuery(name = "Centrodeportivo.findByCenUbicacion", query = "SELECT c FROM Centrodeportivo c WHERE c.cenUbicacion = :cenUbicacion"),
-    @NamedQuery(name = "Centrodeportivo.findByCiudad", query = "SELECT c FROM Centrodeportivo c WHERE c.ciuId.ciuId = :ciuId"),
+    @NamedQuery(name = "Centrodeportivo.findByCiudad", query = "SELECT c FROM Centrodeportivo c WHERE c.barId.ciuId.ciuId = :ciuId"),
     @NamedQuery(name = "Centrodeportivo.findByColor", query = "SELECT c FROM Centrodeportivo c WHERE c.colorId.colorId = :colorId"),
-    @NamedQuery(name = "Centrodeportivo.findByCityOrderByColumnName", query = "SELECT c FROM Centrodeportivo c WHERE c.ciuId.ciuId = :ciuId Order by c.cenNombre asc"),
+    @NamedQuery(name = "Centrodeportivo.findByBarrio", query = "SELECT c FROM Centrodeportivo c WHERE c.barId.barId = :barId"),
+    @NamedQuery(name = "Centrodeportivo.findByCityOrderByColumnName", query = "SELECT c FROM Centrodeportivo c WHERE c.barId.ciuId.ciuId = :ciuId Order by c.cenNombre asc"),
+    @NamedQuery(name = "Centrodeportivo.findByCityAndName", query = "SELECT c FROM Centrodeportivo c WHERE c.barId.ciuId.ciuId = :ciuId AND c.cenNombre = :cenNombre"),
+    @NamedQuery(name = "Centrodeportivo.findByCityAndAddress", query = "SELECT c FROM Centrodeportivo c WHERE c.barId.ciuId.ciuId = :ciuId AND c.cenDireccion = :cenDireccion"),
     @NamedQuery(name = "Centrodeportivo.findByCenAlto", query = "SELECT c FROM Centrodeportivo c WHERE c.cenAlto = :cenAlto")})
 public class Centrodeportivo implements Serializable {
 
@@ -52,6 +55,9 @@ public class Centrodeportivo implements Serializable {
     @Basic(optional = false)
     @Column(name = "cenId")
     private Long cenId;
+    @Size(max = 30)
+    @Column(name = "cenNit")
+    private String cenNit;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -71,14 +77,16 @@ public class Centrodeportivo implements Serializable {
     private Integer cenAlto;
     @OneToMany(mappedBy = "cenId")
     private List<Usuariogrupo> usuariogrupoList;
-    @JoinColumn(name = "ciuId", referencedColumnName = "ciuId")
+    @JoinColumn(name = "barId", referencedColumnName = "barId")
     @ManyToOne(optional = false)
-    private Ciudad ciuId;
+    private Barrio barId;
     @JoinColumn(name = "colorId", referencedColumnName = "colorId")
     @ManyToOne
     private Color colorId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
     private List<Centrodeportivofotos> centrodeportivofotosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
+    private List<Centrodeportivotelefono> centrodeportivotelefonoList;
 
     public Centrodeportivo() {
     }
@@ -100,6 +108,14 @@ public class Centrodeportivo implements Serializable {
         this.cenId = cenId;
     }
 
+    public String getCenNit() {
+        return cenNit;
+    }
+
+    public void setCenNit(String cenNit) {
+        this.cenNit = cenNit;
+    }
+
     public String getCenNombre() {
         return cenNombre;
     }
@@ -115,8 +131,6 @@ public class Centrodeportivo implements Serializable {
     public void setCenDireccion(String cenDireccion) {
         this.cenDireccion = cenDireccion;
     }
-
-    
 
     public String getCenUbicacion() {
         return cenUbicacion;
@@ -151,12 +165,12 @@ public class Centrodeportivo implements Serializable {
         this.usuariogrupoList = usuariogrupoList;
     }
 
-    public Ciudad getCiuId() {
-        return ciuId;
+    public Barrio getBarId() {
+        return barId;
     }
 
-    public void setCiuId(Ciudad ciuId) {
-        this.ciuId = ciuId;
+    public void setBarId(Barrio barId) {
+        this.barId = barId;
     }
 
     public Color getColorId() {
@@ -174,6 +188,15 @@ public class Centrodeportivo implements Serializable {
 
     public void setCentrodeportivofotosList(List<Centrodeportivofotos> centrodeportivofotosList) {
         this.centrodeportivofotosList = centrodeportivofotosList;
+    }
+
+    @XmlTransient
+    public List<Centrodeportivotelefono> getCentrodeportivotelefonoList() {
+        return centrodeportivotelefonoList;
+    }
+
+    public void setCentrodeportivotelefonoList(List<Centrodeportivotelefono> centrodeportivotelefonoList) {
+        this.centrodeportivotelefonoList = centrodeportivotelefonoList;
     }
 
     @Override
@@ -198,7 +221,7 @@ public class Centrodeportivo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tucanchaya.entities.Centrodeportivo[ cenId=" + cenId + " ]";
+        return "entities.Centrodeportivo[ cenId=" + cenId + " ]";
     }
     
 }

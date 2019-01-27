@@ -33,18 +33,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Ciudad.findAll", query = "SELECT c FROM Ciudad c"),
     @NamedQuery(name = "Ciudad.findByCiuId", query = "SELECT c FROM Ciudad c WHERE c.ciuId = :ciuId"),
-    @NamedQuery(name = "Ciudad.findByColumn", query = "SELECT c FROM Ciudad c WHERE LOWER(c.ciunombre) LIKE :ciunombre Order by c.ciunombre asc"),
+    @NamedQuery(name = "Ciudad.findByColumn", query = "SELECT c FROM Ciudad c WHERE LOWER(c.ciuNombre) LIKE :ciunombre Order by c.ciuNombre asc"),
     @NamedQuery(name = "Ciudad.findDefaultCity", query = "SELECT c FROM Ciudad c WHERE c.ciuPorDefecto = true"),
-    @NamedQuery(name = "Ciudad.findByCiunombre", query = "SELECT c FROM Ciudad c WHERE c.ciunombre = :ciunombre")})
+    @NamedQuery(name = "Ciudad.findByCiunombre", query = "SELECT c FROM Ciudad c WHERE c.ciuNombre = :ciunombre")})
 public class Ciudad implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ciuId")
-    private List<Centrodeportivo> centrodeportivoList;
-
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ciuPorDefecto")
-    private boolean ciuPorDefecto;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,8 +47,14 @@ public class Ciudad implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "ciunombre")
-    private String ciunombre;
+    @Column(name = "ciuNombre")
+    private String ciuNombre;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ciuPorDefecto")
+    private boolean ciuPorDefecto;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ciuId")
+    private List<Barrio> barrioList;
 
     public Ciudad() {
     }
@@ -65,9 +63,10 @@ public class Ciudad implements Serializable {
         this.ciuId = ciuId;
     }
 
-    public Ciudad(Long ciuId, String ciunombre) {
+    public Ciudad(Long ciuId, String ciuNombre, boolean ciuPorDefecto) {
         this.ciuId = ciuId;
-        this.ciunombre = ciunombre;
+        this.ciuNombre = ciuNombre;
+        this.ciuPorDefecto = ciuPorDefecto;
     }
 
     public Long getCiuId() {
@@ -78,12 +77,29 @@ public class Ciudad implements Serializable {
         this.ciuId = ciuId;
     }
 
-    public String getCiunombre() {
-        return ciunombre;
+    public String getCiuNombre() {
+        return ciuNombre;
     }
 
-    public void setCiunombre(String ciunombre) {
-        this.ciunombre = ciunombre;
+    public void setCiuNombre(String ciuNombre) {
+        this.ciuNombre = ciuNombre;
+    }
+
+    public boolean getCiuPorDefecto() {
+        return ciuPorDefecto;
+    }
+
+    public void setCiuPorDefecto(boolean ciuPorDefecto) {
+        this.ciuPorDefecto = ciuPorDefecto;
+    }
+
+    @XmlTransient
+    public List<Barrio> getBarrioList() {
+        return barrioList;
+    }
+
+    public void setBarrioList(List<Barrio> barrioList) {
+        this.barrioList = barrioList;
     }
 
     @Override
@@ -108,24 +124,7 @@ public class Ciudad implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tucanchaya.entities.Ciudad[ ciuId=" + ciuId + " ]";
-    }
-
-    public boolean getCiuPorDefecto() {
-        return ciuPorDefecto;
-    }
-
-    public void setCiuPorDefecto(boolean ciuPorDefecto) {
-        this.ciuPorDefecto = ciuPorDefecto;
-    }
-
-    @XmlTransient
-    public List<Centrodeportivo> getCentrodeportivoList() {
-        return centrodeportivoList;
-    }
-
-    public void setCentrodeportivoList(List<Centrodeportivo> centrodeportivoList) {
-        this.centrodeportivoList = centrodeportivoList;
+        return "entities.Ciudad[ ciuId=" + ciuId + " ]";
     }
     
 }

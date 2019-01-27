@@ -50,4 +50,31 @@ public class CentrodeportivoFacade extends AbstractFacade<Centrodeportivo> {
         return null;
     }
     
+    public List<Centrodeportivo> findByCityAndNameOrderByName(Long ciuId,String cenNombre)
+    {
+        Query query = getEntityManager().createNamedQuery("Centrodeportivo.findByCityAndNameOrderByName");
+        query.setParameter("ciuId", ciuId);
+        query.setParameter("cenNombre", "%" + cenNombre + "%");
+        List<Centrodeportivo> resultList = query.getResultList();
+        return resultList;
+    }
+    
+    public boolean existSportCenterName(Long ciuId,String cenNombre)
+    {
+        Query query = getEntityManager().createNamedQuery("Centrodeportivo.findByCityAndName");
+        query.setParameter("ciuId",  ciuId);
+        query.setParameter("cenNombre",  cenNombre);
+        List<Centrodeportivo> resultList = query.getResultList();
+        return resultList!=null && resultList.size()>0;
+    }
+    
+    public boolean existAddress(Long ciuId,String cenDireccion )
+    {
+        Query query = getEntityManager().createNamedQuery("Centrodeportivo.findByCityAndAddress");
+        query.setParameter("ciuId",  ciuId);
+        query.setParameter("cenDireccion",  cenDireccion);
+        List<Centrodeportivo> resultList = query.getResultList();
+        return resultList!=null && resultList.size()>0;
+    }
+    
 }

@@ -26,7 +26,13 @@ public class ImageServlet extends HttpServlet {
 
             String image = request.getParameter("image");
             try {
+                
+                if(image.equals(""))
+                {
+                    image = "defaultSportCenter.png";
+                }
                 BufferedInputStream in = new BufferedInputStream(new FileInputStream(RUTAFOTOSCENTROSDEPORTIVOS + image));
+               
                 // Get image contents.
                 byte[] bytes = new byte[in.available()];
                 in.read(bytes);

@@ -11,7 +11,7 @@
         <ui:composition template="./../../plantillas/frontEndSuperAdmin.xhtml">
 
             <ui:define name="cssPage">
-                
+                <h:outputStylesheet name="./css/cssSportcenters.css"/>
             </ui:define>
 
             <ui:define name="title">
@@ -19,8 +19,8 @@
             </ui:define>
 
             <ui:define name="content">
-                <h:form id="form">
-                    <p:panelGrid style="margin:0px auto; margin-top: 50px;">
+                <h:form id="form" onkeypress="if (event.keyCode == 13) { return false; }">
+                    <p:panelGrid style="margin:0px auto; margin-top: 30px;">
                         <p:row>
                             <p:column>
                                 <p:outputLabel value="Ciudad:" />
@@ -28,9 +28,9 @@
                             <p:column>
                                 <p:selectOneMenu valueChangeListener="#{sportCenterController.changeCity}" id="ciudad" value="#{sportCenterController.city}" panelStyle="width:480px" 
                                                  effect="fade" var="c" style="width:480px;" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItems value="#{sportCenterController.cities}" var="ciudad" itemLabel="#{ciudad.ciunombre}" itemValue="#{ciudad}" />
+                                    <f:selectItems value="#{sportCenterController.cities}" var="ciudad" itemLabel="#{ciudad.ciuNombre}" itemValue="#{ciudad}" />
                                     <p:column>
-                                        <h:outputText value="#{c.ciunombre}" />
+                                        <h:outputText value="#{c.ciuNombre}" />
                                     </p:column>
                                     <p:ajax update="sportCenters"/>
                                     <p:ajax onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"/>
@@ -39,20 +39,223 @@
                         </p:row>
                     </p:panelGrid>
                     
+                    <p:commandButton icon="fa fa-fw fa-plus" value="Registrar" action="#{sportCenterController.openRegisterSportCenterDialog}" 
+                                     update=":addSportCenterForm"/>
+                    
+                    <div class="search">
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12 ui-md-4">
+                                <div class="ui-inputgroup">
+                                    <span class="ui-inputgroup-addon"></span>
+
+                                    <p:inputText  value="#{sportCenterController.sportCenterName}" placeholder="Centro deportivo"
+                                                      >
+                                        <p:ajax event="keyup" listener="#{sportCenterController.searchSportCenter}" update="sportCenters" 
+                                                    />
+                                        </p:inputText>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <p:dataGrid  var="sportCenter" value="#{sportCenterController.sportCenters}" columns="4" layout="grid"
                                 rows="12" paginator="true" id="sportCenters"
                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                 >
                         <p:panel header="#{sportCenter.cenNombre}" style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
-                                <p:graphicImage width="100%" value="/image?image=#{sportCenterController.getDefaultPhoto(sportCenter.cenId)}" />
-
+                                <p:graphicImage width="100%" 
+                                     value="/image?image=#{sportCenterController.getDefaultPhoto(sportCenter.cenId)}" 
+                                     />
+                                <h:outputText value="#{sportCenter.barId.barNombre}" />
                                 <h:outputText value="#{sportCenter.cenDireccion}" />
-
-                                
+                                <p:row>
+                                    <p:commandLink title="editar"  style="color: black;text-decoration: none !important;"
+                                                   action="#{sportCenterController.openEditarSportCenterDialog(sportCenter)}"
+                                                        update=":editSportCenter:editSportCenterPanel" 
+                                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-edit"></i>
+                                    </p:commandLink>
+                                    <p:commandLink style="color: black;text-decoration: none !important;"
+                                                   action="#{sportCenterController.openDeleteSportCenterDialog(sportCenter)}"
+                                                   update=":deletSportCenterForm:deleteSportCenterPanel" 
+                                                    onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                   >
+                                        <i class="fa fa-fw fa-trash"></i>
+                                    </p:commandLink>
+                                    <p:commandLink style="color: black;text-decoration: none !important;"
+                                                    onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                   >
+                                        <i class="fa fa-fw fa-trash"></i>
+                                    </p:commandLink>
+                                </p:row>
+                                    
                             </h:panelGrid>
                         </p:panel>
                     </p:dataGrid>
+                </h:form>
+                
+                <h:form id="addSportCenterForm">
+                    <p:dialog  resizable="false"   header="Centro deportivo" position="center" modal="true"  widgetVar="addSportCenterDialog" >
+
+                        <p:messages closable="true" showDetail="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:panelGrid id="sportCenterPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText style="width: 300px;"  value="#{sportCenterController.nombre}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Ciudad:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="barrio" value="#{sportCenterController.neighborhoodId}" panelStyle="width:480px" 
+                                                     effect="fade" style="width:480px;">
+                                        <f:selectItem itemLabel="Seleccione barrio" itemValue="0"/>
+                                        <f:selectItems value="#{sportCenterController.neighborhoods}" var="neighborhood" itemLabel="#{neighborhood.barNombre}" itemValue="#{neighborhood.barId}" />
+                                       
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Dirección:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText style="width: 300px;"  value="#{sportCenterController.direccion}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton 
+                                        value="Registrar" update=":form:sportCenters"
+                                        action="#{sportCenterController.saveSportCenter}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>        
+
+                    </p:dialog>
+                </h:form>
+                    
+                <h:form id="editSportCenter">
+                    <p:dialog resizable="false"   header="Centro deportivo" position="center" modal="true"  widgetVar="editSportCenterDialog" >
+
+                        <p:messages closable="true" showDetail="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:panelGrid id="editSportCenterPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText style="width: 300px;" id="firstname" value="#{sportCenterController.nombre}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Ciudad:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="barrio" value="#{sportCenterController.neighborhoodId}" panelStyle="width:480px" 
+                                                     effect="fade" style="width:480px;">
+                                        <f:selectItem itemLabel="Seleccione barrio" itemValue="0"/>
+                                        <f:selectItems value="#{sportCenterController.neighborhoods}" var="neighborhood" itemLabel="#{neighborhood.barNombre}" itemValue="#{neighborhood.barId}" />
+                                       
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Dirección:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText style="width: 300px;"  value="#{sportCenterController.direccion}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton 
+                                        value="Editar" update=":form:sportCenters" action="#{sportCenterController.editSportCenter}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>        
+
+                    </p:dialog>
+                </h:form>
+                    
+                <h:form id="deletSportCenterForm">
+                    <p:dialog resizable="false"   header="Centro deportivo" position="center" modal="true"  widgetVar="deteletSportCenterDialog" >
+                        
+                        <p:panelGrid id="deleteSportCenterPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column>
+                                    <p:messages id="deleteMessage" showDetail="true" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: center;">
+                                    <p:commandButton 
+                                        action="#{sportCenterController.deleteSportCenter}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        update=":form:sportCenters"
+                                        value="Aceptar"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form> 
+                    
+                <h:form id="deleteSportCenterResultForm">  
+                    <p:dialog resizable="false"   header="Centro deportivo" position="center" modal="true"  widgetVar="deteletSportCenterResultDialog" >
+                        
+                        <p:panelGrid id="deleteSportCenterResultPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column>
+                                    <p:messages showDetail="true" >
+                                        <p:autoUpdate/>
+                                    </p:messages>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: center;">
+                                    <p:commandButton
+                                        value="Aceptar"
+                                        onclick="PF('deteletSportCenterResultDialog').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
                 </h:form>
             </ui:define>
 

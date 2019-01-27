@@ -39,7 +39,7 @@ public class CityController implements Serializable
     {
         if(cities== null)
         {
-            cities = cityEJB.findAllOderByName("ciunombre");
+            cities = cityEJB.findAllOderByName("ciuNombre");
         }
         return cities;
     }
@@ -67,13 +67,7 @@ public class CityController implements Serializable
     
     public void openRegisterCityDialog()
     {
-       RequestContext requestContext = RequestContext.getCurrentInstance();          
-       FacesContext context = FacesContext.getCurrentInstance();
-       Application application = context.getApplication();
-       ViewHandler viewHandler = application.getViewHandler();
-       UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
-       context.setViewRoot(viewRoot);       
-       context.renderResponse(); 
+       RequestContext requestContext = RequestContext.getCurrentInstance(); 
        this.nombre = "";
        requestContext.execute("PF('addCityDialog').show()");
     }
@@ -87,7 +81,7 @@ public class CityController implements Serializable
            {
                Ciudad ciudad = new Ciudad();
                ciudad.setCiuPorDefecto(false);
-               ciudad.setCiunombre(nombre);
+               ciudad.setCiuNombre(nombre);
                cityEJB.create(ciudad);
                cities = null;
                nombre = "";
@@ -108,7 +102,7 @@ public class CityController implements Serializable
     public void openEditarCityDialog(Ciudad ciudad)
     {
        RequestContext requestContext = RequestContext.getCurrentInstance();          
-       this.nombre = ciudad.getCiunombre();
+       this.nombre = ciudad.getCiuNombre();
        this.citySelected = ciudad;
        requestContext.execute("PF('editCityDialog').show()");
     }
@@ -118,11 +112,11 @@ public class CityController implements Serializable
         if(!nombre.equals(""))
         {
            nombre = nombre.substring(0,1).toUpperCase() + nombre.substring(1).toLowerCase();
-           if(!nombre.equals(citySelected.getCiunombre()))
+           if(!nombre.equals(citySelected.getCiuNombre()))
            {
                if(!cityEJB.existCity(nombre))
                 {
-                    citySelected.setCiunombre(nombre);
+                    citySelected.setCiuNombre(nombre);
                     cityEJB.edit(citySelected);
                     cities = null;
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info:", "Ciudad actualizada correctamente."));
@@ -143,7 +137,7 @@ public class CityController implements Serializable
     {
        RequestContext requestContext = RequestContext.getCurrentInstance();  
        this.citySelected = ciudad;
-       FacesContext.getCurrentInstance().addMessage("deleteMessage", new FacesMessage(FacesMessage.SEVERITY_WARN, "", "Esta seguro que desea eliminar la ciudad de "+ciudad.getCiunombre()+"?"));
+       FacesContext.getCurrentInstance().addMessage("deleteMessage", new FacesMessage(FacesMessage.SEVERITY_WARN, "", "Esta seguro que desea eliminar la ciudad de "+ciudad.getCiuNombre()+"?"));
        requestContext.execute("PF('deteletCityDialog').show()");
     }
     

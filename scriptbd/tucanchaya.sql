@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 24-01-2019 a las 03:02:21
+-- Tiempo de generación: 27-01-2019 a las 20:56:04
 -- Versión del servidor: 5.7.16
 -- Versión de PHP: 5.6.30
 
@@ -23,12 +23,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `barrio`
+--
+
+CREATE TABLE `barrio` (
+  `barId` bigint(20) NOT NULL,
+  `ciuId` bigint(20) NOT NULL,
+  `barNombre` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `barrio`
+--
+
+INSERT INTO `barrio` (`barId`, `ciuId`, `barNombre`) VALUES
+(5, 5, 'Granjas');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `centrodeportivo`
 --
 
 CREATE TABLE `centrodeportivo` (
   `cenId` bigint(20) NOT NULL,
-  `ciuId` bigint(20) NOT NULL,
+  `barId` bigint(20) NOT NULL,
   `colorId` int(11) DEFAULT NULL,
   `cenNit` varchar(30) DEFAULT NULL,
   `cenNombre` varchar(100) NOT NULL,
@@ -42,8 +61,8 @@ CREATE TABLE `centrodeportivo` (
 -- Volcado de datos para la tabla `centrodeportivo`
 --
 
-INSERT INTO `centrodeportivo` (`cenId`, `ciuId`, `colorId`, `cenNit`, `cenNombre`, `cenDireccion`, `cenUbicacion`, `cenDescripcion`, `cenAlto`) VALUES
-(3, 12, 1, NULL, 'dfadsfds', NULL, NULL, NULL, NULL);
+INSERT INTO `centrodeportivo` (`cenId`, `barId`, `colorId`, `cenNit`, `cenNombre`, `cenDireccion`, `cenUbicacion`, `cenDescripcion`, `cenAlto`) VALUES
+(5, 5, NULL, NULL, '8 gol', 'Cr 6 # 26-09', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -54,7 +73,7 @@ INSERT INTO `centrodeportivo` (`cenId`, `ciuId`, `colorId`, `cenNit`, `cenNombre
 CREATE TABLE `centrodeportivofotos` (
   `cenFotId` bigint(20) NOT NULL,
   `cenId` bigint(20) NOT NULL,
-  `cenFoNombre` varchar(40) NOT NULL,
+  `cenFoNombre` varchar(200) NOT NULL,
   `cenFotPrincipal` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -110,7 +129,8 @@ CREATE TABLE `color` (
 
 INSERT INTO `color` (`colorId`, `colorHexadecimal`, `colorNombre`) VALUES
 (1, '#0000FF', 'Azul'),
-(6, '#FF0000', 'Rojo');
+(6, '#FF0000', 'Rojo'),
+(7, '#FF00FF', 'Violeta');
 
 -- --------------------------------------------------------
 
@@ -167,12 +187,19 @@ CREATE TABLE `usuariogrupo` (
 --
 
 --
+-- Indices de la tabla `barrio`
+--
+ALTER TABLE `barrio`
+  ADD PRIMARY KEY (`barId`),
+  ADD KEY `fl_ciudad_barrio` (`ciuId`);
+
+--
 -- Indices de la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
   ADD PRIMARY KEY (`cenId`),
-  ADD KEY `fk_centrodeportivo_ciudad` (`ciuId`),
-  ADD KEY `fk_centrodeportivo_color` (`colorId`);
+  ADD KEY `fk_centrodeportivo_color` (`colorId`),
+  ADD KEY `fk_centrodeportivo_barrio` (`barId`);
 
 --
 -- Indices de la tabla `centrodeportivofotos`
@@ -227,10 +254,15 @@ ALTER TABLE `usuariogrupo`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `barrio`
+--
+ALTER TABLE `barrio`
+  MODIFY `barId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
 -- AUTO_INCREMENT de la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
-  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivofotos`
 --
@@ -245,12 +277,12 @@ ALTER TABLE `centrodeportivotelefono`
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `ciuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ciuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT de la tabla `color`
 --
 ALTER TABLE `color`
-  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
@@ -261,10 +293,16 @@ ALTER TABLE `usuario`
 --
 
 --
+-- Filtros para la tabla `barrio`
+--
+ALTER TABLE `barrio`
+  ADD CONSTRAINT `fl_ciudad_barrio` FOREIGN KEY (`ciuId`) REFERENCES `ciudad` (`ciuId`);
+
+--
 -- Filtros para la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
-  ADD CONSTRAINT `fk_centrodeportivo_ciudad` FOREIGN KEY (`ciuId`) REFERENCES `ciudad` (`ciuId`),
+  ADD CONSTRAINT `fk_centrodeportivo_barrio` FOREIGN KEY (`barId`) REFERENCES `barrio` (`barId`),
   ADD CONSTRAINT `fk_centrodeportivo_color` FOREIGN KEY (`colorId`) REFERENCES `color` (`colorId`);
 
 --

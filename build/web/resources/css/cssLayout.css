@@ -1,12 +1,11 @@
 
 #header {
-    position: fixed;
     background-image: url(../image/header.png.xhtml);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     color: white;
     height: 180px;
-    width: 100%
+    width: 100%;
 }
 
 #content_header{
@@ -24,7 +23,6 @@
 
 #menu{
    width: 100%;
-    margin-top: 180px;
 }
 
 #content_main{
