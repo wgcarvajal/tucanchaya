@@ -31,6 +31,14 @@ public class CentrodeportivofotosFacade extends AbstractFacade<Centrodeportivofo
         super(Centrodeportivofotos.class);
     }
     
+    public List<Centrodeportivofotos> findByCenId(Long cenId)
+    {
+        Query query = getEntityManager().createNamedQuery("Centrodeportivofotos.findByCenId");
+        query.setParameter("cenId", cenId);
+        List<Centrodeportivofotos> resultList = query.getResultList();
+        return resultList;
+    }
+    
     public Centrodeportivofotos findByCenIdDefaultPhoto(Long cenId)
     {
         Query query = getEntityManager().createNamedQuery("Centrodeportivofotos.findByCenIdDefaultPhoto");

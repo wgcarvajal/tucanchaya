@@ -2,261 +2,179 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <body>
 
         <ui:composition template="./../../plantillas/frontEndSuperAdmin.xhtml">
 
             <ui:define name="cssPage">
-                <h:outputStylesheet name="./css/cssSportcenters.css"/>
+                
             </ui:define>
 
             <ui:define name="title">
-                Centros Deportivos
+                Centro deportivo
             </ui:define>
 
             <ui:define name="content">
-                <h:form id="form" onkeypress="if (event.keyCode == 13) { return false; }">
-                    <p:panelGrid style="margin:0px auto; margin-top: 30px;">
-                        <p:row>
+                <h:form id="titleForm">
+                    <p:panelGrid style="margin: 0px auto; margin-top: 10px;">
+                        <p:row rendered="#{!sportCenterController.editTitle}">
                             <p:column>
-                                <p:outputLabel value="Ciudad:" />
+                                <h:outputLabel style="font-size: 15pt; font-weight: bold;" value="#{sportCenterController.sportCenter.cenNombre}"/>
+                            </p:column>
+                            
+                            <p:column>
+                                <p:commandLink title="editar"  style="color: black;text-decoration: none !important;"
+                                               action="#{sportCenterController.editTitleActive}"
+                                    update="titleForm" 
+                                    onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                >
+                                    <i class="fa fa-fw fa-edit"></i>
+                                </p:commandLink>
+                            </p:column>
+
+                        </p:row>
+                        <p:row rendered="#{sportCenterController.editTitle}">
+                            <p:column>
+                                <p:inputText value="#{sportCenterController.sportCenterTitle}" style="width: 300px;"/>
                             </p:column>
                             <p:column>
-                                <p:selectOneMenu valueChangeListener="#{sportCenterController.changeCity}" id="ciudad" value="#{sportCenterController.city}" panelStyle="width:480px" 
-                                                 effect="fade" var="c" style="width:480px;" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItems value="#{sportCenterController.cities}" var="ciudad" itemLabel="#{ciudad.ciuNombre}" itemValue="#{ciudad}" />
-                                    <p:column>
-                                        <h:outputText value="#{c.ciuNombre}" />
-                                    </p:column>
-                                    <p:ajax update="sportCenters"/>
-                                    <p:ajax onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"/>
-                                </p:selectOneMenu>
+                                <p:commandLink value="Aceptar"  style="color: black;text-decoration: none !important;"
+                                    action="#{sportCenterController.editTitleOk}"
+                                    update="titleForm"
+                                    onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                />
+                            </p:column>
+                            <p:column>
+                                <p:commandLink value="Cancelar"  style="color: black;text-decoration: none !important;"
+                                    update="titleForm" 
+                                    action="#{sportCenterController.editTitleCancel}"
+                                    onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                />
+                            </p:column>
+                            <p:column>
+                                <p:messages closable="true"  showDetail="true" />
+                            </p:column>
+
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>
+                
+                <h:form  id="imageForm" style="width:50%; margin: 0px auto; margin-top: 10px;">
+                    <p:panelGrid rendered="#{!sportCenterController.editPhotos}">
+                        <p:row>
+                            <p:column >
+
+                                <p:galleria value="#{sportCenterController.sportCenterPhotos}" var="sportCenterPhoto" 
+                                            panelWidth="500" panelHeight="300">
+                                    <p:graphicImage style="width: 100%;height: 100%;"
+                                                        value="/image?image=#{sportCenterPhoto.cenFoNombre}" 
+                                                        />
+                                </p:galleria>
+                            </p:column>
+                            <p:column>
+                                <p:commandLink title="editar"  style="color: black;text-decoration: none !important;"
+                                               action="#{sportCenterController.editPhotosActive}"
+                                               update="imageForm :uploadImageForm :fileUploadForm" 
+                                               onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                               >
+                                    <i class="fa fa-fw fa-edit"></i>
+                                </p:commandLink>
                             </p:column>
                         </p:row>
                     </p:panelGrid>
-                    
-                    <p:commandButton icon="fa fa-fw fa-plus" value="Registrar" action="#{sportCenterController.openRegisterSportCenterDialog}" 
-                                     update=":addSportCenterForm"/>
-                    
-                    <div class="search">
-                        <div class="ui-g ui-fluid">
-                            <div class="ui-g-12 ui-md-4">
-                                <div class="ui-inputgroup">
-                                    <span class="ui-inputgroup-addon"></span>
+                </h:form>
+               
+                <div style="width:50%; margin: 0px auto; margin-top: 10px;">
+                    <h:form id="fileUploadForm">
+                        <p:messages showDetail="true" closable="true"/>
+                        <p:fileUpload
+                            rendered="#{sportCenterController.editPhotos}"
+                            style="width: 100%;" 
+                            fileUploadListener="#{sportCenterController.cargarFoto}" 
+                            mode="advanced"
+                            auto="true"
+                            update="fileUploadForm :uploadImageForm"
+                            dragDropSupport="false"
+                            label="cargar"
+                            allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                            onstart="PF('efectoCarga').show()"  oncomplete="PF('efectoCarga').hide()"
+                            />
+                    </h:form>
 
-                                    <p:inputText  value="#{sportCenterController.sportCenterName}" placeholder="Centro deportivo"
-                                                      >
-                                        <p:ajax event="keyup" listener="#{sportCenterController.searchSportCenter}" update="sportCenters" 
-                                                    />
-                                        </p:inputText>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <p:dataGrid  var="sportCenter" value="#{sportCenterController.sportCenters}" columns="4" layout="grid"
-                                rows="12" paginator="true" id="sportCenters"
-                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                >
-                        <p:panel header="#{sportCenter.cenNombre}" style="text-align:center">
-                            <h:panelGrid columns="1" style="width:100%">
-                                <p:graphicImage width="100%" 
-                                     value="/image?image=#{sportCenterController.getDefaultPhoto(sportCenter.cenId)}" 
-                                     />
-                                <h:outputText value="#{sportCenter.barId.barNombre}" />
-                                <h:outputText value="#{sportCenter.cenDireccion}" />
+                    <h:form id="uploadImageForm">
+                        <p:panelGrid style="width: 100%;" rendered="#{sportCenterController.editPhotos}">
+                            <p:row>
+                                <p:column style="width: 90%;">
+                                    <div style="width:100%;height:300px;">
+                                        <p:repeat value="#{sportCenterController.editSportCenterPhotos}" 
+                                                  var="sportCenterPhoto"
+                                                  >
+                                            <div style="border: 1px #000000 solid; width: 165px;height:100px;float: left; margin-left:5px; margin-bottom: 10px;">
+                                                <p:commandLink title="Imagen por defecto" rendered="#{sportCenterPhoto.cenFotPrincipal}" 
+                                                               style="position: absolute;color: white;background-color: black;">
+                                                   <i  class="fa fa-fw fa-star"></i> 
+                                                </p:commandLink>
+                                                
+                                                <p:graphicImage style="width: 100%;height: 80%;"
+                                                                value="/image?image=#{sportCenterPhoto.cenFoNombre}" 
+                                                                />
+                                                <div style="text-align: center;width: 100%; height: 20%;">
+                                                    <p:commandLink title="Establecer como imagen por defecto" 
+                                                                   action="#{sportCenterController.openDefaultImagenDialog(sportCenterPhoto)}"
+                                                                   rendered="#{!sportCenterPhoto.cenFotPrincipal}" 
+                                                                   update="uploadImageForm"
+                                                                   style="color: black;text-decoration: none !important;">
+                                                        <i class="fa fa-fw fa-check"></i>
+                                                    </p:commandLink>
+                                                    
+                                                    <p:commandLink rendered="#{!sportCenterPhoto.cenFotPrincipal}" title="Eliminar" style="color: black;text-decoration: none !important;">
+                                                        <i class="fa fa-fw fa-trash"></i>
+                                                    </p:commandLink>
+                                                </div>
+                                            </div>
+                                        </p:repeat>
+                                    </div>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <p:commandLink value="Aceptar"  style="color: black;text-decoration: none !important;"
+                                                   action="#{sportCenterController.editPhotosOk}"
+                                                   update="imageForm :uploadImageForm :fileUploadForm"
+                                                   onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                   />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        
+                        <p:dialog resizable="false"   header="Establecer" position="center" modal="true"  widgetVar="defaulImagenDialog" >
+                            <p:panelGrid id="defaulImagenPanel" style="text-align:left;" styleClass="panelgrid">
                                 <p:row>
-                                    <p:commandLink title="editar"  style="color: black;text-decoration: none !important;"
-                                                   action="#{sportCenterController.openEditarSportCenterDialog(sportCenter)}"
-                                                        update=":editSportCenter:editSportCenterPanel" 
-                                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
-                                                       >
-                                            <i class="fa fa-fw fa-edit"></i>
-                                    </p:commandLink>
-                                    <p:commandLink style="color: black;text-decoration: none !important;"
-                                                   action="#{sportCenterController.openDeleteSportCenterDialog(sportCenter)}"
-                                                   update=":deletSportCenterForm:deleteSportCenterPanel" 
-                                                    onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
-                                                   >
-                                        <i class="fa fa-fw fa-trash"></i>
-                                    </p:commandLink>
-                                    <p:commandLink style="color: black;text-decoration: none !important;"
-                                                    onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
-                                                   >
-                                        <i class="fa fa-fw fa-trash"></i>
-                                    </p:commandLink>
+                                    <p:column>
+                                        <p:messages showDetail="true" >
+                                            <p:autoUpdate/>
+                                        </p:messages>
+                                    </p:column>
                                 </p:row>
-                                    
-                            </h:panelGrid>
-                        </p:panel>
-                    </p:dataGrid>
-                </h:form>
+                                <p:row>
+                                    <p:column style="text-align: center;">
+                                        <p:commandButton
+                                            action="#{sportCenterController.setDefaultImage}"
+                                            value="Aceptar"
+                                            update="uploadImageForm"
+                                            />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </p:dialog>
+                        
+                    </h:form>
+                </div>
                 
-                <h:form id="addSportCenterForm">
-                    <p:dialog  resizable="false"   header="Centro deportivo" position="center" modal="true"  widgetVar="addSportCenterDialog" >
-
-                        <p:messages closable="true" showDetail="true" >
-                            <p:autoUpdate />
-                        </p:messages>
-                        <p:panelGrid id="sportCenterPanel" style="text-align:left;" styleClass="panelgrid">
-                            <p:row>
-                                <p:column style="text-align:right;">
-                                    <p:outputLabel  value="Nombre:" />
-                                    <p:outputLabel style="color:red;"  value=" * " />
-                                </p:column>
-                                <p:column>
-                                    <p:inputText style="width: 300px;"  value="#{sportCenterController.nombre}"
-                                                 />
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column style="text-align:right;">
-                                    <p:outputLabel  value="Ciudad:" />
-                                    <p:outputLabel style="color:red;"  value=" * " />
-                                </p:column>
-                                <p:column>
-                                    <p:selectOneMenu id="barrio" value="#{sportCenterController.neighborhoodId}" panelStyle="width:480px" 
-                                                     effect="fade" style="width:480px;">
-                                        <f:selectItem itemLabel="Seleccione barrio" itemValue="0"/>
-                                        <f:selectItems value="#{sportCenterController.neighborhoods}" var="neighborhood" itemLabel="#{neighborhood.barNombre}" itemValue="#{neighborhood.barId}" />
-                                       
-                                    </p:selectOneMenu>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column style="text-align:right;">
-                                    <p:outputLabel  value="Dirección:" />
-                                    <p:outputLabel style="color:red;"  value=" * " />
-                                </p:column>
-                                <p:column>
-                                    <p:inputText style="width: 300px;"  value="#{sportCenterController.direccion}"
-                                                 />
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column>
-                                </p:column>
-                                <p:column>
-                                    <p:commandButton 
-                                        value="Registrar" update=":form:sportCenters"
-                                        action="#{sportCenterController.saveSportCenter}"
-                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
-                                        />
-                                </p:column>
-                            </p:row>
-
-                        </p:panelGrid>        
-
-                    </p:dialog>
-                </h:form>
-                    
-                <h:form id="editSportCenter">
-                    <p:dialog resizable="false"   header="Centro deportivo" position="center" modal="true"  widgetVar="editSportCenterDialog" >
-
-                        <p:messages closable="true" showDetail="true" >
-                            <p:autoUpdate />
-                        </p:messages>
-                        <p:panelGrid id="editSportCenterPanel" style="text-align:left;" styleClass="panelgrid">
-                            <p:row>
-                                <p:column style="text-align:right;">
-                                    <p:outputLabel  value="Nombre:" />
-                                    <p:outputLabel style="color:red;"  value=" * " />
-                                </p:column>
-                                <p:column>
-                                    <p:inputText style="width: 300px;" id="firstname" value="#{sportCenterController.nombre}"
-                                                 />
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column style="text-align:right;">
-                                    <p:outputLabel  value="Ciudad:" />
-                                    <p:outputLabel style="color:red;"  value=" * " />
-                                </p:column>
-                                <p:column>
-                                    <p:selectOneMenu id="barrio" value="#{sportCenterController.neighborhoodId}" panelStyle="width:480px" 
-                                                     effect="fade" style="width:480px;">
-                                        <f:selectItem itemLabel="Seleccione barrio" itemValue="0"/>
-                                        <f:selectItems value="#{sportCenterController.neighborhoods}" var="neighborhood" itemLabel="#{neighborhood.barNombre}" itemValue="#{neighborhood.barId}" />
-                                       
-                                    </p:selectOneMenu>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column style="text-align:right;">
-                                    <p:outputLabel  value="Dirección:" />
-                                    <p:outputLabel style="color:red;"  value=" * " />
-                                </p:column>
-                                <p:column>
-                                    <p:inputText style="width: 300px;"  value="#{sportCenterController.direccion}"
-                                                 />
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column>
-                                </p:column>
-                                <p:column>
-                                    <p:commandButton 
-                                        value="Editar" update=":form:sportCenters" action="#{sportCenterController.editSportCenter}"
-                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
-                                        />
-                                </p:column>
-                            </p:row>
-
-                        </p:panelGrid>        
-
-                    </p:dialog>
-                </h:form>
-                    
-                <h:form id="deletSportCenterForm">
-                    <p:dialog resizable="false"   header="Centro deportivo" position="center" modal="true"  widgetVar="deteletSportCenterDialog" >
-                        
-                        <p:panelGrid id="deleteSportCenterPanel" style="text-align:left;" styleClass="panelgrid">
-                            <p:row>
-                                <p:column>
-                                    <p:messages id="deleteMessage" showDetail="true" />
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column style="text-align: center;">
-                                    <p:commandButton 
-                                        action="#{sportCenterController.deleteSportCenter}"
-                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
-                                        update=":form:sportCenters"
-                                        value="Aceptar"
-                                        />
-                                </p:column>
-                            </p:row>
-                        </p:panelGrid>
-                    </p:dialog>
-                </h:form> 
-                    
-                <h:form id="deleteSportCenterResultForm">  
-                    <p:dialog resizable="false"   header="Centro deportivo" position="center" modal="true"  widgetVar="deteletSportCenterResultDialog" >
-                        
-                        <p:panelGrid id="deleteSportCenterResultPanel" style="text-align:left;" styleClass="panelgrid">
-                            <p:row>
-                                <p:column>
-                                    <p:messages showDetail="true" >
-                                        <p:autoUpdate/>
-                                    </p:messages>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column style="text-align: center;">
-                                    <p:commandButton
-                                        value="Aceptar"
-                                        onclick="PF('deteletSportCenterResultDialog').hide()"
-                                        />
-                                </p:column>
-                            </p:row>
-                        </p:panelGrid>
-                    </p:dialog>
-                </h:form>
+                
             </ui:define>
 
         </ui:composition>

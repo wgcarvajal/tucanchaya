@@ -11,6 +11,8 @@ package com.tucanchaya.controller.util;
  */
 public class Util {
     
+    public static String projectPath = "/Tucanchaya";
+    public static String RUTAFOTOSCENTROSDEPORTIVOS= "/Users/aranda/filesTucanchaya/fotosCentrosdeportivos/";
     
     public static String formatText(String value)
     {

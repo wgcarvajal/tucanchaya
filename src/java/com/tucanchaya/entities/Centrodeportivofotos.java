@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Centrodeportivofotos.findByCenFotId", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenFotId = :cenFotId"),
     @NamedQuery(name = "Centrodeportivofotos.findByCenFoNombre", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenFoNombre = :cenFoNombre"),
     @NamedQuery(name = "Centrodeportivofotos.findByCenIdDefaultPhoto", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenId.cenId = :cenId AND c.cenFotPrincipal = TRUE"),
+    @NamedQuery(name = "Centrodeportivofotos.findByCenId", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenId.cenId = :cenId"),
     @NamedQuery(name = "Centrodeportivofotos.findByCenFotPrincipal", query = "SELECT c FROM Centrodeportivofotos c WHERE c.cenFotPrincipal = :cenFotPrincipal")})
 public class Centrodeportivofotos implements Serializable {
 
@@ -42,8 +43,6 @@ public class Centrodeportivofotos implements Serializable {
     @Basic(optional = false)
     @Column(name = "cenFotId")
     private Long cenFotId;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "cenFoNombre")
     private String cenFoNombre;

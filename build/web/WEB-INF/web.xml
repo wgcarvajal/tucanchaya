@@ -33,7 +33,7 @@
 	</servlet-mapping>
         
         
-        <filter>
+      <!-- <filter>
    <filter-name>Pretty Filter</filter-name>
    <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
 </filter>
@@ -44,5 +44,5 @@
    <dispatcher>FORWARD</dispatcher> 
    <dispatcher>REQUEST</dispatcher> 
    <dispatcher>ERROR</dispatcher>
-</filter-mapping>
+</filter-mapping>-->
 </web-app>

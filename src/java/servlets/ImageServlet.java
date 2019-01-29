@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import com.tucanchaya.controller.util.Util;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ImageServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-        private static final String RUTAFOTOSCENTROSDEPORTIVOS= "/Users/aranda/filesTucanchaya/fotosCentrosdeportivos/";
 
         @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,7 +31,7 @@ public class ImageServlet extends HttpServlet {
                 {
                     image = "defaultSportCenter.png";
                 }
-                BufferedInputStream in = new BufferedInputStream(new FileInputStream(RUTAFOTOSCENTROSDEPORTIVOS + image));
+                BufferedInputStream in = new BufferedInputStream(new FileInputStream(Util.RUTAFOTOSCENTROSDEPORTIVOS + image));
                
                 // Get image contents.
                 byte[] bytes = new byte[in.available()];

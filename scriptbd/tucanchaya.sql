@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 27-01-2019 a las 20:56:04
+-- Tiempo de generación: 29-01-2019 a las 19:34:53
 -- Versión del servidor: 5.7.16
 -- Versión de PHP: 5.6.30
 
@@ -37,7 +37,8 @@ CREATE TABLE `barrio` (
 --
 
 INSERT INTO `barrio` (`barId`, `ciuId`, `barNombre`) VALUES
-(5, 5, 'Granjas');
+(5, 5, 'Granjas'),
+(6, 12, 'Ciudad jardin');
 
 -- --------------------------------------------------------
 
@@ -62,7 +63,9 @@ CREATE TABLE `centrodeportivo` (
 --
 
 INSERT INTO `centrodeportivo` (`cenId`, `barId`, `colorId`, `cenNit`, `cenNombre`, `cenDireccion`, `cenUbicacion`, `cenDescripcion`, `cenAlto`) VALUES
-(5, 5, NULL, NULL, '8 gol', 'Cr 6 # 26-09', NULL, NULL, NULL);
+(5, 5, NULL, NULL, '8 gol', 'Cr 6 # 26-09', NULL, NULL, NULL),
+(6, 6, NULL, NULL, 'El templo', 'Calle 5 # 3- 23', NULL, NULL, NULL),
+(7, 6, NULL, NULL, 'La cancha', 'Cr 6 # 34-45', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -73,7 +76,7 @@ INSERT INTO `centrodeportivo` (`cenId`, `barId`, `colorId`, `cenNit`, `cenNombre
 CREATE TABLE `centrodeportivofotos` (
   `cenFotId` bigint(20) NOT NULL,
   `cenId` bigint(20) NOT NULL,
-  `cenFoNombre` varchar(200) NOT NULL,
+  `cenFoNombre` varchar(200) DEFAULT NULL,
   `cenFotPrincipal` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -257,17 +260,17 @@ ALTER TABLE `usuariogrupo`
 -- AUTO_INCREMENT de la tabla `barrio`
 --
 ALTER TABLE `barrio`
-  MODIFY `barId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `barId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
-  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivofotos`
 --
 ALTER TABLE `centrodeportivofotos`
-  MODIFY `cenFotId` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `cenFotId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivotelefono`
 --
@@ -277,7 +280,7 @@ ALTER TABLE `centrodeportivotelefono`
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `ciuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `ciuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `color`
 --
