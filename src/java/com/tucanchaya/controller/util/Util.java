@@ -11,8 +11,13 @@ package com.tucanchaya.controller.util;
  */
 public class Util {
     
+    //public static String projectPath = "/tucanchaya";
+    //public static String RUTAFOTOSCENTROSDEPORTIVOS= "/home/daniel/Escritorio/filesTucanchaya/fotosCentrosdeportivos/";
+    //public static String RUTAFOTOSPRODUCTOS= "/home/daniel/Escritorio/filesTucanchaya/fotosProductos/";
+    
     public static String projectPath = "/Tucanchaya";
     public static String RUTAFOTOSCENTROSDEPORTIVOS= "/Users/aranda/filesTucanchaya/fotosCentrosdeportivos/";
+    public static String RUTAFOTOSPRODUCTOS= "/Users/aranda/filesTucanchaya/fotosProductos/";
     
     public static String formatText(String value)
     {

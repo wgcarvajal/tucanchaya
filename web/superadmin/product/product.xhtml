@@ -1,0 +1,285 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../plantillas/frontEndSuperAdmin.xhtml">
+
+            <ui:define name="cssPage">
+                <h:outputStylesheet name="./css/cssProduct.css"/>
+            </ui:define>
+
+            <ui:define name="title">
+                title
+            </ui:define>
+
+            <ui:define name="content">
+                
+                <h:form onkeypress="if (event.keyCode == 13) { return false; }">
+                <div class="search">
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon"></span>
+                                
+                                <p:inputText  value="#{productsController.product}" placeholder="Buscar producto"
+                                                  >
+                                    <p:ajax event="keyup" listener="#{productsController.searchProduct}" update=":formProducts" 
+                                                />
+                                    </p:inputText>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </h:form>
+                
+                <h:form id="formProducts">
+                    <div class="productList">
+                        <p:commandButton
+                            action="#{productsController.openRegistrerProductDialog()}"
+                            icon="fa fa-fw fa-plus"
+                            update=":productForm"
+                            onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                            />
+                        <p:dataGrid columns="4" 
+                                    value="#{productsController.products}"
+                                    var="product" 
+                                    rendered="#{productsController.products.size() > 0}"
+                                    layout="grid"
+                                    rows="12" paginator="true"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    >
+                            <div class="productos">
+                                
+                                <div class="contenedorImgProd">
+                                    <p:graphicImage class="imgProd" 
+                                                value="/imageproduct?image=#{productsController.getPhotoProduct(product.prodId)}"
+                                                />
+                                </div>
+                                #{product.prodNombre}
+                                <div class="remove_button">
+                                    <p:commandLink style="color: black;text-decoration: none !important;"
+                                                   action="#{productsController.openDeleteProductDialog(product)}"
+                                                   update=":deleteProductForm"
+                                                   onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                   >
+                                        <i class="fa fa-fw fa-trash"></i>
+                                    </p:commandLink>
+                                </div>
+                                <div class="edit_button">
+                                    <p:commandLink title="editar"  style="color: black;text-decoration: none !important;"
+                                                   action="#{productsController.openEditProductDialog(product)}"
+                                                   update="editProductForm"
+                                                   onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                   >
+                                        <i class="fa fa-fw fa-edit"></i>
+                                    </p:commandLink>
+                                </div>
+
+                            </div>
+                        </p:dataGrid>
+                    </div>
+                </h:form>
+                
+                <h:form id="productForm">
+                    <p:dialog resizable="false"   header="Producto" position="center" modal="true"  widgetVar="addProductDialog" >
+
+                        <p:messages closable="true" showDetail="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:panelGrid id="productPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="firstname" value="#{productsController.nombre}"
+                                                 label="Firstname" requiredMessage="Ingrese nombre de usuario"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Categoria:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+
+                                <p:column>
+                                    <p:selectOneMenu value="#{productsController.catId}">
+                                        <f:selectItems value="#{productsController.categories}" var="categoria" itemLabel="#{categoria.catNombre}" itemValue="#{categoria.catId}" />
+                                        
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                            </p:row>
+                            
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Imagen:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+
+                                <p:column>
+                                    <p:growl id="messages" showDetail="true" />
+                                    
+                                    <p:fileUpload fileUploadListener="#{productsController.event}"
+                                                  value="#{productsController.file}"
+                                                  mode="advanced"
+                                                  auto="true"
+                                                  dragDropSupport="false"
+                                                  label="cargar"
+                                                  update="messages"
+                                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                                  onstart="PF('efectoCarga').show()"  oncomplete="PF('efectoCarga').hide()"
+                                                  />
+                                </p:column>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Precio:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+
+                                <p:column>
+                                    <p:inputText id="price"
+                                                 value="#{productsController.valor}"
+                                                 label="Price" requiredMessage="Ingrese el precio del producto"/>
+                                </p:column>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton action="#{productsController.saveProducts}"
+                                        value="Registrar" update=":formProducts"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>        
+
+                    </p:dialog>
+                </h:form>
+                
+                <h:form id="editProductForm">
+                    <p:dialog resizable="false"   header="Producto" position="center" modal="true"  widgetVar="editProductDialog" >
+
+                        <p:messages closable="true" showDetail="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:panelGrid id="editProductPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="firstname" value="#{productsController.nombre}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Imagen:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+
+                                <p:column>
+                                    <p:growl id="messages" showDetail="true" />
+                                    
+                                    <p:fileUpload fileUploadListener="#{productsController.event}"
+                                                  value="#{productsController.file}"
+                                                  mode="advanced"
+                                                  auto="true"
+                                                  dragDropSupport="false"
+                                                  label="cargar"
+                                                  update="messages"
+                                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                                  onstart="PF('efectoCarga').show()"  oncomplete="PF('efectoCarga').hide()"
+                                                  />
+                                </p:column>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton 
+                                        value="Editar" update=":formProducts" action="#{productsController.editProduct}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>        
+
+                    </p:dialog>
+                </h:form>
+                
+                
+                
+                <h:form id="deleteProductForm">
+                    <p:dialog resizable="false"   header="Productos" position="center" modal="true"  widgetVar="deteletProductDialog" >
+                        
+                        <p:panelGrid id="deleteProductPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column>
+                                    <p:messages id="deleteMessage" showDetail="true" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: center;">
+                                    <p:commandButton 
+                                        action="#{productsController.deleteProduct}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        update=":formProducts"
+                                        value="Aceptar"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                
+                <h:form id="deleteProductResultForm">
+                    <p:dialog resizable="false"   header="Producto" position="center" modal="true"  widgetVar="deteletProductResultDialog" >
+                        
+                        <p:panelGrid id="deleteProductResultPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column>
+                                    <p:messages showDetail="true" >
+                                        <p:autoUpdate/>
+                                    </p:messages>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: center;">
+                                    <p:commandButton
+                                        value="Aceptar"
+                                        onclick="PF('deteletProductResultDialog').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                
+                
+                
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

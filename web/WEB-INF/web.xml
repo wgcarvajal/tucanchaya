@@ -32,6 +32,15 @@
 		<url-pattern>/image</url-pattern>
 	</servlet-mapping>
         
+        <servlet>
+		<servlet-name>ImageProductServlet</servlet-name>
+		<servlet-class>servlets.ImageProductServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ImageProductServlet</servlet-name>
+		<url-pattern>/imageproduct</url-pattern>
+	</servlet-mapping> 
+        
         
       <!-- <filter>
    <filter-name>Pretty Filter</filter-name>

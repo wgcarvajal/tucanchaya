@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Centrodeportivotelefono.findAll", query = "SELECT c FROM Centrodeportivotelefono c"),
     @NamedQuery(name = "Centrodeportivotelefono.findByCenTelId", query = "SELECT c FROM Centrodeportivotelefono c WHERE c.cenTelId = :cenTelId"),
     @NamedQuery(name = "Centrodeportivotelefono.findByCenTelNumero", query = "SELECT c FROM Centrodeportivotelefono c WHERE c.cenTelNumero = :cenTelNumero"),
-    @NamedQuery(name = "Centrodeportivotelefono.findByCentTelTipo", query = "SELECT c FROM Centrodeportivotelefono c WHERE c.centTelTipo = :centTelTipo")})
+    @NamedQuery(name = "Centrodeportivotelefono.findByCenIdAndTipo", query = "SELECT c FROM Centrodeportivotelefono c WHERE c.cenId.cenId = :cenId AND c.cenTelTipo = :cenTelTipo"),
+    @NamedQuery(name = "Centrodeportivotelefono.findByCentTelTipo", query = "SELECT c FROM Centrodeportivotelefono c WHERE c.cenTelTipo = :cenTelTipo")})
 public class Centrodeportivotelefono implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,8 +50,8 @@ public class Centrodeportivotelefono implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1)
-    @Column(name = "centTelTipo")
-    private String centTelTipo;
+    @Column(name = "cenTelTipo")
+    private String cenTelTipo;
     @JoinColumn(name = "cenId", referencedColumnName = "cenId")
     @ManyToOne(optional = false)
     private Centrodeportivo cenId;
@@ -62,10 +63,10 @@ public class Centrodeportivotelefono implements Serializable {
         this.cenTelId = cenTelId;
     }
 
-    public Centrodeportivotelefono(Integer cenTelId, String cenTelNumero, String centTelTipo) {
+    public Centrodeportivotelefono(Integer cenTelId, String cenTelNumero, String cenTelTipo) {
         this.cenTelId = cenTelId;
         this.cenTelNumero = cenTelNumero;
-        this.centTelTipo = centTelTipo;
+        this.cenTelTipo = cenTelTipo;
     }
 
     public Integer getCenTelId() {
@@ -84,12 +85,12 @@ public class Centrodeportivotelefono implements Serializable {
         this.cenTelNumero = cenTelNumero;
     }
 
-    public String getCentTelTipo() {
-        return centTelTipo;
+    public String getCenTelTipo() {
+        return cenTelTipo;
     }
 
-    public void setCentTelTipo(String centTelTipo) {
-        this.centTelTipo = centTelTipo;
+    public void setCenTelTipo(String cenTelTipo) {
+        this.cenTelTipo = cenTelTipo;
     }
 
     public Centrodeportivo getCenId() {

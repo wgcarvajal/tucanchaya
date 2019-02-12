@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 29-01-2019 a las 19:34:53
+-- Tiempo de generación: 12-02-2019 a las 02:31:31
 -- Versión del servidor: 5.7.16
 -- Versión de PHP: 5.6.30
 
@@ -32,13 +32,18 @@ CREATE TABLE `barrio` (
   `barNombre` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `barrio`
+-- Estructura de tabla para la tabla `categoria`
 --
 
-INSERT INTO `barrio` (`barId`, `ciuId`, `barNombre`) VALUES
-(5, 5, 'Granjas'),
-(6, 12, 'Ciudad jardin');
+CREATE TABLE `categoria` (
+  `catId` bigint(20) NOT NULL,
+  `catNombre` varchar(100) CHARACTER SET latin1 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 -- --------------------------------------------------------
 
@@ -58,15 +63,6 @@ CREATE TABLE `centrodeportivo` (
   `cenAlto` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `centrodeportivo`
---
-
-INSERT INTO `centrodeportivo` (`cenId`, `barId`, `colorId`, `cenNit`, `cenNombre`, `cenDireccion`, `cenUbicacion`, `cenDescripcion`, `cenAlto`) VALUES
-(5, 5, NULL, NULL, '8 gol', 'Cr 6 # 26-09', NULL, NULL, NULL),
-(6, 6, NULL, NULL, 'El templo', 'Calle 5 # 3- 23', NULL, NULL, NULL),
-(7, 6, NULL, NULL, 'La cancha', 'Cr 6 # 34-45', NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -80,6 +76,7 @@ CREATE TABLE `centrodeportivofotos` (
   `cenFotPrincipal` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
 -- --------------------------------------------------------
 
 --
@@ -90,7 +87,7 @@ CREATE TABLE `centrodeportivotelefono` (
   `cenTelId` int(11) NOT NULL,
   `cenId` bigint(20) NOT NULL,
   `cenTelNumero` varchar(20) NOT NULL,
-  `centTelTipo` varchar(1) NOT NULL
+  `cenTelTipo` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -110,9 +107,7 @@ CREATE TABLE `ciudad` (
 --
 
 INSERT INTO `ciudad` (`ciuId`, `ciuNombre`, `ciuPorDefecto`) VALUES
-(5, 'Neiva', 0),
-(11, 'Pitalito', 0),
-(12, 'Popayán', 1);
+(1, 'Popayán', 1);
 
 -- --------------------------------------------------------
 
@@ -132,8 +127,27 @@ CREATE TABLE `color` (
 
 INSERT INTO `color` (`colorId`, `colorHexadecimal`, `colorNombre`) VALUES
 (1, '#0000FF', 'Azul'),
-(6, '#FF0000', 'Rojo'),
-(7, '#FF00FF', 'Violeta');
+(2, '#FF0000', 'Rojo'),
+(3, '#FF00FF', 'Violeta');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `escenario`
+--
+
+CREATE TABLE `escenario` (
+  `escId` bigint(20) NOT NULL,
+  `cenId` bigint(20) NOT NULL,
+  `escNombre` int(11) NOT NULL,
+  `escMedidaRealAncho` float DEFAULT NULL,
+  `escMedidaRealLargo` float DEFAULT NULL,
+  `escImagenAncho` float DEFAULT NULL,
+  `escImagenLargo` float DEFAULT NULL,
+  `escImagenAngulo` float DEFAULT NULL,
+  `escImagen` varchar(200) DEFAULT NULL,
+  `escEstado` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -154,6 +168,33 @@ INSERT INTO `grupo` (`gruId`, `gruDescripcion`) VALUES
 ('admin', NULL),
 ('employee', NULL),
 ('superAdmin', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `precio`
+--
+
+CREATE TABLE `precio` (
+  `precId` bigint(20) NOT NULL,
+  `precValor` bigint(20) NOT NULL,
+  `precioFechaInicial` varchar(20) NOT NULL,
+  `precioFechaFinal` varchar(20) DEFAULT NULL,
+  `prodId` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `producto`
+--
+
+CREATE TABLE `producto` (
+  `prodId` bigint(20) NOT NULL,
+  `prodNombre` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `prodImagen` varchar(200) DEFAULT NULL,
+  `catId` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -197,6 +238,12 @@ ALTER TABLE `barrio`
   ADD KEY `fl_ciudad_barrio` (`ciuId`);
 
 --
+-- Indices de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  ADD PRIMARY KEY (`catId`);
+
+--
 -- Indices de la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
@@ -231,10 +278,31 @@ ALTER TABLE `color`
   ADD PRIMARY KEY (`colorId`);
 
 --
+-- Indices de la tabla `escenario`
+--
+ALTER TABLE `escenario`
+  ADD PRIMARY KEY (`escId`),
+  ADD KEY `fk_centrodeportivo_escenario` (`cenId`);
+
+--
 -- Indices de la tabla `grupo`
 --
 ALTER TABLE `grupo`
   ADD PRIMARY KEY (`gruId`);
+
+--
+-- Indices de la tabla `precio`
+--
+ALTER TABLE `precio`
+  ADD PRIMARY KEY (`precId`),
+  ADD KEY `fk_producto_precio` (`prodId`);
+
+--
+-- Indices de la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD PRIMARY KEY (`prodId`),
+  ADD KEY `fk_categoria_producto` (`catId`);
 
 --
 -- Indices de la tabla `usuario`
@@ -260,17 +328,22 @@ ALTER TABLE `usuariogrupo`
 -- AUTO_INCREMENT de la tabla `barrio`
 --
 ALTER TABLE `barrio`
-  MODIFY `barId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `barId` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  MODIFY `catId` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
-  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivofotos`
 --
 ALTER TABLE `centrodeportivofotos`
-  MODIFY `cenFotId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `cenFotId` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivotelefono`
 --
@@ -280,12 +353,27 @@ ALTER TABLE `centrodeportivotelefono`
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `ciuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ciuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `color`
 --
 ALTER TABLE `color`
-  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT de la tabla `escenario`
+--
+ALTER TABLE `escenario`
+  MODIFY `escId` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `precio`
+--
+ALTER TABLE `precio`
+  MODIFY `precId` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+  MODIFY `prodId` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
@@ -319,6 +407,24 @@ ALTER TABLE `centrodeportivofotos`
 --
 ALTER TABLE `centrodeportivotelefono`
   ADD CONSTRAINT `fk_centrodeportivo_centrodeportivotelefono` FOREIGN KEY (`cenId`) REFERENCES `centrodeportivo` (`cenId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `escenario`
+--
+ALTER TABLE `escenario`
+  ADD CONSTRAINT `fk_centrodeportivo_escenario` FOREIGN KEY (`cenId`) REFERENCES `centrodeportivo` (`cenId`);
+
+--
+-- Filtros para la tabla `precio`
+--
+ALTER TABLE `precio`
+  ADD CONSTRAINT `fk_producto_precio` FOREIGN KEY (`prodId`) REFERENCES `producto` (`prodId`);
+
+--
+-- Filtros para la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD CONSTRAINT `fk_categoria_producto` FOREIGN KEY (`catId`) REFERENCES `categoria` (`catId`);
 
 --
 -- Filtros para la tabla `usuariogrupo`

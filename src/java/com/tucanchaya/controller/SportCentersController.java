@@ -169,6 +169,7 @@ public class SportCentersController implements Serializable {
                         c.setCenNombre(nombre);
                         c.setCenDireccion(direccion);
                         c.setBarId(b);
+                        c.setCenAlto(500);
                         sportCenterEJB.create(c);
                         sportCenters = null;
                         nombre = "";

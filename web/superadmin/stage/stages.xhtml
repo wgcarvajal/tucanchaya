@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../../plantillas/frontEndSuperAdmin.xhtml">
+
+            <ui:define name="cssPage">
+                
+            </ui:define>
+
+            <ui:define name="title">
+                Escenario
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <div style="text-align: center;">
+                       <h:outputLabel style="font-size: 15pt; font-weight: bold;" 
+                                      value="#{sportCenterController.sportCenter.cenNombre}"/> 
+                    </div>
+                </h:form>
+                
+                <h:form>
+                    <p:commandButton icon="fa fa-fw fa-plus" value="Escenario"/>
+                </h:form>
+                
+                <h:form id="formSportCenter">                
+                    <div 
+                        style="margin:0px auto; margin-top: 10px;width:900px; position:relative;min-height: #{stageController.sportCenter.cenAlto}px;background-color: #{stageController.color};">
+                        <ui:repeat value="#{mostrarEscenariosController.listaEscenarios}" var="escenario">
+                            <p:commandLink   action="#{estadoSeleccionController.seleccionarEscenario(escenario.escid)}">
+                                <div  class="escenario#{escenario.escid}" title="#{escenario.escnombre}"/>
+                            </p:commandLink>                     
+                        </ui:repeat>                        
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>
