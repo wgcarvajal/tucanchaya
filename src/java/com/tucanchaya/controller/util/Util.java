@@ -17,6 +17,8 @@ public class Util {
     
     public static String projectPath = "/Tucanchaya";
     public static String RUTAFOTOSCENTROSDEPORTIVOS= "/Users/aranda/filesTucanchaya/fotosCentrosdeportivos/";
+    public static String RUTAIMAGENESESCENARIOS= "/Users/aranda/filesTucanchaya/escenarios/imagenesEscenario/";
+    public static String RUTAFOTOSESCENARIOS= "/Users/aranda/filesTucanchaya/escenarios/fotosEscenario/";
     public static String RUTAFOTOSPRODUCTOS= "/Users/aranda/filesTucanchaya/fotosProductos/";
     
     public static String formatText(String value)

@@ -41,6 +41,26 @@
 		<url-pattern>/imageproduct</url-pattern>
 	</servlet-mapping> 
         
+        <servlet>
+		<servlet-name>ImageEscServlet</servlet-name>
+		<servlet-class>servlets.ImageEscServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ImageEscServlet</servlet-name>
+		<url-pattern>/imageEsc</url-pattern>
+	</servlet-mapping> 
+        
+        <servlet>
+		<servlet-name>PhotoEscServlet</servlet-name>
+		<servlet-class>servlets.PhotoEscServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PhotoEscServlet</servlet-name>
+		<url-pattern>/photoEsc</url-pattern>
+	</servlet-mapping> 
+        
+        
+        
         
       <!-- <filter>
    <filter-name>Pretty Filter</filter-name>

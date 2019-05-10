@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
 @NamedQuery(name = "Producto.findByProdId", query = "SELECT p FROM Producto p WHERE p.prodId = :prodId"),
 @NamedQuery(name = "Producto.findByCatId", query = "SELECT p FROM Producto p WHERE p.catId.catId = :catId"),
-@NamedQuery(name = "Producto.findByColumn", query = "SELECT p FROM Producto p WHERE LOWER(p.prodNombre) LIKE :prodNombre Order by p.prodNombre asc"),
+@NamedQuery(name = "Producto.findByColumn", query = "SELECT p FROM Producto p WHERE p.cenId.cenId =:cenId And LOWER(p.prodNombre) LIKE :prodNombre Order by p.prodNombre asc"),
+@NamedQuery(name = "Producto.findProductByCenIdOrderbyName", query = "SELECT p FROM Producto p WHERE p.cenId.cenId =:cenId Order by p.prodNombre asc"),
 @NamedQuery(name = "Producto.findByProdNombre", query = "SELECT p FROM Producto p WHERE p.prodNombre = :prodNombre")})
 public class Producto implements Serializable {
 
@@ -57,6 +58,9 @@ public class Producto implements Serializable {
     @JoinColumn(name = "catId", referencedColumnName = "catId")
     @ManyToOne(optional = false)
     private Categoria catId;
+    @JoinColumn(name = "cenId", referencedColumnName = "cenId")
+    @ManyToOne(optional = true)
+    private Centrodeportivo cenId;
 
     public Producto() {
     }
@@ -101,6 +105,16 @@ public class Producto implements Serializable {
     public void setCatId(Categoria catId) {
         this.catId = catId;
     }
+
+    public Centrodeportivo getCenId() {
+        return cenId;
+    }
+
+    public void setCenId(Centrodeportivo cenId) {
+        this.cenId = cenId;
+    }
+    
+    
 
     @Override
     public int hashCode() {

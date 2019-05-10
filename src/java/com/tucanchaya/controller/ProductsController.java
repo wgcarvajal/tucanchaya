@@ -7,9 +7,11 @@ package com.tucanchaya.controller;
 
 import com.tucanchaya.controller.util.Util;
 import com.tucanchaya.entities.Categoria;
+import com.tucanchaya.entities.Centrodeportivo;
 import com.tucanchaya.entities.Precio;
 import com.tucanchaya.entities.Producto;
 import com.tucanchaya.facade.CategoriaFacade;
+import com.tucanchaya.facade.CentrodeportivoFacade;
 import com.tucanchaya.facade.PrecioFacade;
 import com.tucanchaya.facade.ProductoFacade;
 import java.io.File;
@@ -21,6 +23,9 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -39,12 +44,16 @@ import org.primefaces.model.UploadedFile;
 @ManagedBean(name="productsController")
 @ViewScoped
 public class ProductsController implements Serializable {
+    
+    @EJB
+    private CentrodeportivoFacade sportCenterEJB;
     @EJB
     private ProductoFacade productoEJB;
     @EJB
     private CategoriaFacade categoriaEJB;
     @EJB
     private PrecioFacade precioEJB;
+    private Centrodeportivo sportCenter;
     private String nombre;
     private List<Producto> products;
     private List<Categoria> categories;
@@ -60,8 +69,36 @@ public class ProductsController implements Serializable {
     
     @PostConstruct
     public void init() {
-        if (categories == null) {
-            categories = categoriaEJB.findAllOderByName("catNombre");
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> paramMap = context.getExternalContext().getRequestParameterMap();
+        String sportCenterId = paramMap.get("s");
+        
+        if (sportCenterId != null && !sportCenterId.equals("")) {
+            try {
+                Long id = Long.parseLong(sportCenterId);
+                sportCenter = sportCenterEJB.find(id);
+                if (sportCenter == null) {
+                    goCentros();
+                }
+                else{
+                    if (categories == null) {
+                        categories = categoriaEJB.findAllOderByName("catNombre");
+                     }
+                }
+            } catch (NumberFormatException e) {
+                goCentros();
+            }
+        } else {
+            goCentros();
+        }
+    }
+    
+    private void goCentros() {
+        try {
+            String uri = Util.projectPath+"/superadmin/sportCenter/sportCenters.xhtml?i=1";
+            FacesContext.getCurrentInstance().getExternalContext().redirect(uri);
+        } catch (IOException ex) {
+            Logger.getLogger(SportCentersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -119,11 +156,6 @@ public class ProductsController implements Serializable {
     public void setValor(Long valor) {
         this.valor = valor;
     }
-
-    
-    
-    
-    
     
     public void openRegistrerProductDialog()
     {     
@@ -161,7 +193,7 @@ public class ProductsController implements Serializable {
     public List<Producto> getProducts() {
         if(products==null)
         {
-            products = productoEJB.findAllOderByName("prodNombre");
+            products = productoEJB.findProductByCenIdOrderbyName(sportCenter.getCenId());
         }
         return products;
     }
@@ -213,7 +245,7 @@ public class ProductsController implements Serializable {
     
     public void searchProduct()
     {
-        products = productoEJB.findProductByColumn(product);
+        products = productoEJB.findProductByColumn(sportCenter.getCenId(),product);
     }
     
     
@@ -233,6 +265,7 @@ public class ProductsController implements Serializable {
                     producto.setProdNombre(nombre);
                     producto.setProdImagen("");
                     producto.setCatId(categoria);
+                    producto.setCenId(sportCenter);
 
                     if (valor != null) {
                         

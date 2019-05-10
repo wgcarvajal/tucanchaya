@@ -780,5 +780,27 @@ public class SportCenterController implements Serializable
         }
     }
     
+    public void goToEmployes() {
+        try {
+            //String uri = Util.projectPath+"/sa/centro?i=1&s="+sportCenter.getCenId();
+            String uri = Util.projectPath+"/superadmin/user/employees.xhtml?i=1&s="+sportCenter.getCenId();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(uri);
+        } catch (IOException ex) {
+            Logger.getLogger(SportCentersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void goToProducts() {
+        try {
+            //String uri = Util.projectPath+"/sa/centro?i=1&s="+sportCenter.getCenId();
+            String uri = Util.projectPath+"/superadmin/product/product.xhtml?i=1&s="+sportCenter.getCenId();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(uri);
+        } catch (IOException ex) {
+            Logger.getLogger(SportCentersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+   
+    
 }
 

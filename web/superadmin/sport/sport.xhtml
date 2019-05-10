@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../../plantillas/frontEndSuperAdmin.xhtml">
+
+            <ui:define name="cssPage">
+                <h:outputStylesheet name="./css/cssSport.css"/>
+            </ui:define>
+
+            <ui:define name="title">
+                Deporte
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form onkeypress="if (event.keyCode == 13) { return false; }">
+                <div class="search">
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon"></span>
+                                
+                                    <p:inputText  value="#{sportController.sport}" placeholder="Buscar deporte"
+                                                  >
+                                        <p:ajax event="keyup" listener="#{sportController.searchSport}" update=":formSports" 
+                                                />
+                                    </p:inputText>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </h:form>
+                
+                
+                <h:form id="formSports">
+                    <div class="sportList">
+                        <p:commandButton
+                            action="#{sportController.openRegisterSportDialog}"
+                            icon="fa fa-fw fa-plus" update=":sportForm" 
+                            onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                            />
+                        <p:dataGrid columns="4" 
+                                    value="#{sportController.sports}"
+                                    var="sport" 
+                                    rendered="#{sportController.sports.size() > 0}">
+                            <div class="deporte">
+                                    #{sport.depNombre}
+                                    <div class="remove_button">
+                                        <p:commandLink style="color: black;text-decoration: none !important;"
+                                                       action="#{sportController.openDeleteSportDialog(sport)}"
+                                                       update=":deleteSportForm" 
+                                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-trash"></i>
+                                        </p:commandLink>
+                                    </div>
+                                    <div class="edit_button">
+                                        <p:commandLink title="editar"  style="color: black;text-decoration: none !important;"
+                                                       action="#{sportController.openEditarSportDialog(sport)}"
+                                                       update=":editSportForm" 
+                                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-edit"></i>
+                                        </p:commandLink>
+                                    </div>
+                                    
+                            </div>
+                        </p:dataGrid>
+                    </div>
+                </h:form>
+                <h:form id="sportForm">
+                    <p:dialog resizable="false"   header="Deporte" position="center" modal="true"  widgetVar="addSportDialog" >
+
+                        <p:messages closable="true" showDetail="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:panelGrid id="sportPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="firstname" value="#{sportController.nombre}"
+                                                 label="Firstname" requiredMessage="Ingrese nombre de usuario"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton action="#{sportController.saveSport}"
+                                        value="Registrar" update=":formSports"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>        
+
+                    </p:dialog>
+                </h:form>
+                
+                <h:form id="editSportForm">
+                    <p:dialog resizable="false"   header="Deporte" position="center" modal="true"  widgetVar="editSportDialog" >
+
+                        <p:messages closable="true" showDetail="true" >
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:panelGrid id="editSportPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="firstname" value="#{sportController.nombre}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton 
+                                        value="Editar" update=":formSports" action="#{sportController.editSport}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>        
+
+                    </p:dialog>
+                </h:form>
+                <h:form id="deleteSportForm">
+                    <p:dialog resizable="false"   header="Deporte" position="center" modal="true"  widgetVar="deteletSportDialog" >
+                        
+                        <p:panelGrid id="deleteSportPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column>
+                                    <p:messages id="deleteMessage" showDetail="true" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: center;">
+                                    <p:commandButton 
+                                        action="#{sportController.deleteSport}"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        update=":formSports"
+                                        value="Aceptar"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="deleteSportResult">
+                    <p:dialog resizable="false"   header="Deporte" position="center" modal="true"  widgetVar="deteletSportResultDialog" >
+                        
+                        <p:panelGrid id="deleteSportResultPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column>
+                                    <p:messages showDetail="true" >
+                                        <p:autoUpdate/>
+                                    </p:messages>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="text-align: center;">
+                                    <p:commandButton
+                                        value="Aceptar"
+                                        onclick="PF('deteletSportResultDialog').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

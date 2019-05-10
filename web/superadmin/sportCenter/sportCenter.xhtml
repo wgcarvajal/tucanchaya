@@ -27,6 +27,14 @@
                             <p:menuitem action="#{sportCenterController.goToStages}"  style="color: black;" value="Escenarios"  icon="fa fa-fw fa-th" >
                             </p:menuitem>
                         </p:megaMenu>
+                        <p:megaMenu style="margin: 10px;">
+                            <p:menuitem action="#{sportCenterController.goToProducts}"  style="color: black;" value="Productos"  icon="fa fa-glass-cheers" >
+                            </p:menuitem>
+                        </p:megaMenu>
+                        <p:megaMenu style="margin: 10px;">
+                            <p:menuitem action="#{sportCenterController.goToEmployes}"  style="color: black;" value="Empleados"  icon="fa fa-users" >
+                            </p:menuitem>
+                        </p:megaMenu>
                     </h:form>
                 </div>
                 <div style="width: 85%;float: left;">
@@ -576,7 +584,7 @@
                                     <p:column style="width: 10%;">
                                         <p:commandLink value="Aceptar"  style="color: black;text-decoration: none !important;"
                                                        action="#{sportCenterController.editPhotosOk}"
-                                                       update="imageForm :uploadImageForm :fileUploadForm"
+                                                       update="uploadImageForm :imageForm :fileUploadForm"
                                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
                                                        />
                                     </p:column>
@@ -625,7 +633,7 @@
                                 </p:panelGrid>
                             </p:dialog>
 
-                            <p:dialog resizable="false"   header="eliminar" position="center" modal="true"  widgetVar="deleteImagenDialog" >
+                            <p:dialog resizable="false"   header="Eliminar" position="center" modal="true"  widgetVar="deleteImagenDialog" >
                                 <p:panelGrid id="deleteImagenPanel" style="text-align:left;" styleClass="panelgrid">
                                     <p:row>
                                         <p:column>
@@ -647,7 +655,7 @@
                                 </p:panelGrid>
                             </p:dialog>
 
-                            <p:dialog resizable="false"   header="Establecer" position="center" modal="true"  widgetVar="deleteImageResultDialog" >
+                            <p:dialog resizable="false"   header="Eliminar" position="center" modal="true"  widgetVar="deleteImageResultDialog" >
                                 <p:panelGrid id="deleteImageResultPanel" style="text-align:left;" styleClass="panelgrid">
                                     <p:row>
                                         <p:column>

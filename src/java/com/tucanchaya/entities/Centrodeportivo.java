@@ -75,18 +75,16 @@ public class Centrodeportivo implements Serializable {
     private String cenDescripcion;
     @Column(name = "cenAlto")
     private Integer cenAlto;
-    @OneToMany(mappedBy = "cenId")
-    private List<Usuariogrupo> usuariogrupoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
+    private List<Escenario> escenarioList;
     @JoinColumn(name = "barId", referencedColumnName = "barId")
     @ManyToOne(optional = false)
     private Barrio barId;
     @JoinColumn(name = "colorId", referencedColumnName = "colorId")
     @ManyToOne
     private Color colorId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
-    private List<Centrodeportivofotos> centrodeportivofotosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
-    private List<Centrodeportivotelefono> centrodeportivotelefonoList;
+    @OneToMany(mappedBy = "cenId")
+    private List<Usuario> usuarioList;
 
     public Centrodeportivo() {
     }
@@ -157,12 +155,12 @@ public class Centrodeportivo implements Serializable {
     }
 
     @XmlTransient
-    public List<Usuariogrupo> getUsuariogrupoList() {
-        return usuariogrupoList;
+    public List<Escenario> getEscenarioList() {
+        return escenarioList;
     }
 
-    public void setUsuariogrupoList(List<Usuariogrupo> usuariogrupoList) {
-        this.usuariogrupoList = usuariogrupoList;
+    public void setEscenarioList(List<Escenario> escenarioList) {
+        this.escenarioList = escenarioList;
     }
 
     public Barrio getBarId() {
@@ -180,23 +178,14 @@ public class Centrodeportivo implements Serializable {
     public void setColorId(Color colorId) {
         this.colorId = colorId;
     }
-
+    
     @XmlTransient
-    public List<Centrodeportivofotos> getCentrodeportivofotosList() {
-        return centrodeportivofotosList;
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
     }
 
-    public void setCentrodeportivofotosList(List<Centrodeportivofotos> centrodeportivofotosList) {
-        this.centrodeportivofotosList = centrodeportivofotosList;
-    }
-
-    @XmlTransient
-    public List<Centrodeportivotelefono> getCentrodeportivotelefonoList() {
-        return centrodeportivotelefonoList;
-    }
-
-    public void setCentrodeportivotelefonoList(List<Centrodeportivotelefono> centrodeportivotelefonoList) {
-        this.centrodeportivotelefonoList = centrodeportivotelefonoList;
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
 
     @Override
@@ -223,5 +212,4 @@ public class Centrodeportivo implements Serializable {
     public String toString() {
         return "entities.Centrodeportivo[ cenId=" + cenId + " ]";
     }
-    
 }

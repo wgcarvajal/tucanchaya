@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,14 +35,15 @@ public class Usuariogrupo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 75)
     @Column(name = "usuNombreUsuario")
     private String usuNombreUsuario;
-    @JoinColumn(name = "cenId", referencedColumnName = "cenId")
-    @ManyToOne
-    private Centrodeportivo cenId;
     @JoinColumn(name = "gruId", referencedColumnName = "gruId")
     @ManyToOne(optional = false)
     private Grupo gruId;
@@ -51,8 +54,21 @@ public class Usuariogrupo implements Serializable {
     public Usuariogrupo() {
     }
 
-    public Usuariogrupo(String usuNombreUsuario) {
+    public Usuariogrupo(Long id) {
+        this.id = id;
+    }
+
+    public Usuariogrupo(Long id, String usuNombreUsuario) {
+        this.id = id;
         this.usuNombreUsuario = usuNombreUsuario;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsuNombreUsuario() {
@@ -61,14 +77,6 @@ public class Usuariogrupo implements Serializable {
 
     public void setUsuNombreUsuario(String usuNombreUsuario) {
         this.usuNombreUsuario = usuNombreUsuario;
-    }
-
-    public Centrodeportivo getCenId() {
-        return cenId;
-    }
-
-    public void setCenId(Centrodeportivo cenId) {
-        this.cenId = cenId;
     }
 
     public Grupo getGruId() {
@@ -90,7 +98,7 @@ public class Usuariogrupo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (usuNombreUsuario != null ? usuNombreUsuario.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -101,7 +109,7 @@ public class Usuariogrupo implements Serializable {
             return false;
         }
         Usuariogrupo other = (Usuariogrupo) object;
-        if ((this.usuNombreUsuario == null && other.usuNombreUsuario != null) || (this.usuNombreUsuario != null && !this.usuNombreUsuario.equals(other.usuNombreUsuario))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -109,7 +117,7 @@ public class Usuariogrupo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tucanchaya.entities.Usuariogrupo[ usuNombreUsuario=" + usuNombreUsuario + " ]";
+        return "test.Usuariogrupo[ id=" + id + " ]";
     }
     
 }

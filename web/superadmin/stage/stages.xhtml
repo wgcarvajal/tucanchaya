@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
 
@@ -18,27 +19,971 @@
             </ui:define>
 
             <ui:define name="content">
+                <h:form id="formStageCSS">
+                    <style type="text/css">
+                        <ui:repeat value="#{stageController.stageList}" var="stage">
+                                .stage#{stage.escId}{
+                                        position:absolute;
+                                        background-size: #{stage.escImagenAncho}px;
+                                        top: #{stage.escImagenMagenSuperior}px;
+                                        left: #{stage.escImagenMagenIzquierda}px;
+                                        width: #{stage.escImagenAncho}px;
+                                        height: #{stage.escImagenLargo}px;
+                                        transform: rotate(#{stage.escImagenAngulo}deg);
+                                        -moz-transform: rotate(#{stage.escImagenAngulo}deg);
+                                        -o-transform: rotate(#{stage.escImagenAngulo}deg);
+                                        -webkit-transform: rotate(#{stage.escImagenAngulo}deg);
+                                    }
+
+                                    .stage#{stage.escId}:hover{
+                                    transform: rotate(#{stage.escImagenAngulo}deg) scale(0.8);
+                                    -moz-transform: rotate(#{stage.escImagenAngulo}deg) scale(0.8);
+                                    -o-transform: rotate(#{stage.escImagenAngulo}deg) scale(0.8);
+                                    -webkit-transform: rotate(#{stage.escImagenAngulo}deg) scale(0.8);
+                                    }
+                        </ui:repeat>
+                    </style>
+                </h:form>
                 <h:form>
                     <div style="text-align: center;">
                        <h:outputLabel style="font-size: 15pt; font-weight: bold;" 
                                       value="#{sportCenterController.sportCenter.cenNombre}"/> 
                     </div>
                 </h:form>
-                
-                <h:form>
-                    <p:commandButton icon="fa fa-fw fa-plus" value="Escenario"/>
-                </h:form>
-                
-                <h:form id="formSportCenter">                
-                    <div 
-                        style="margin:0px auto; margin-top: 10px;width:900px; position:relative;min-height: #{stageController.sportCenter.cenAlto}px;background-color: #{stageController.color};">
-                        <ui:repeat value="#{mostrarEscenariosController.listaEscenarios}" var="escenario">
-                            <p:commandLink   action="#{estadoSeleccionController.seleccionarEscenario(escenario.escid)}">
-                                <div  class="escenario#{escenario.escid}" title="#{escenario.escnombre}"/>
-                            </p:commandLink>                     
-                        </ui:repeat>                        
+                <div style="width: 100%; height: 100%;">
+                    <div style="float: left;width:13%;">
+                        <h:form>
+                            <p:commandButton 
+                                action="#{stageController.openAddStageDialog}"
+                                update=":formAddStage"
+                                icon="fa fa-fw fa-plus" 
+                                onstart="PF('efectoCarga').show()"  
+                                onsuccess="PF('efectoCarga').hide()"
+                                value="Escenario"/>
+                        </h:form>
+                        <h:form>
+                            <p:commandButton 
+                                style="margin-top:5px;"
+                                action="#{stageController.openAddObjectDialog}"
+                                update=":formAddObject"
+                                icon="fa fa-fw fa-plus" 
+                                onstart="PF('efectoCarga').show()"  
+                                onsuccess="PF('efectoCarga').hide()"
+                                value="Objecto"/>
+                        </h:form>
+                        <h:form id="formColor" style="margin-top: 10px;">
+                            <p:panelGrid rendered="#{!stageController.editColor}">
+                                <p:row>
+                                    <p:column>
+                                        <div style="width: 20px; height: 20px; background-color: #{stageController.color}" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandLink title="editar"
+                                                       action="#{stageController.goEditColor}"
+                                                       update="formColor"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-edit"></i>
+                                        </p:commandLink>
+                                    </p:column>
+                                    
+                                </p:row>
+                            </p:panelGrid>
+                            
+                            <p:panelGrid rendered="#{stageController.editColor}">
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <p:selectOneMenu var="c" 
+                                                         value="#{stageController.colorSelected}"
+                                                         converter="selectOneMenuConverter"
+                                                         >
+                                            <f:selectItems value="#{stageController.colors}" var="color"
+                                                           itemLabel="#{color.colorNombre}"
+                                                           itemValue="#{color}"
+                                                           />
+                                            <p:column>
+                                                <div style="width: 20px; height: 20px; background-color: #{c.colorHexadecimal};">
+                                                    
+                                                </div>
+                                            </p:column>
+
+                                            <p:column>
+                                                #{c.colorNombre}
+                                            </p:column>
+                                        </p:selectOneMenu>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:commandLink value="Aceptar"
+                                                       action="#{stageController.editOk}"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       update="formColor :formSportCenter"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandLink value="Cancelar" 
+                                                       update="formColor"
+                                                       action="#{stageController.editCancel}"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            
+                        </h:form>
+                        
+                        <h:form id="formHeight" style="margin-top: 10px;">
+                            
+                            <p:panelGrid rendered="#{!stageController.editHeight}">
+                                <p:row>
+                                    <p:column>
+                                        Alto: #{stageController.sportCenter.cenAlto}px
+                                    </p:column>
+                                    <p:column>
+                                       <p:commandLink title="editar"
+                                                      action="#{stageController.goEditHeight}"
+                                                      update="formHeight"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-edit"></i>
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            
+                            <p:panelGrid rendered="#{stageController.editHeight}">
+                                <p:row>
+                                    <p:column>
+                                        <p:commandButton
+                                            action="#{stageController.increaseHeight}"
+                                            update="formHeight :formSportCenter"
+                                            disabled="#{stageController.height eq 600}" 
+                                            icon="fa fa-fw fa-plus" />
+                                    </p:column>
+                                    <p:column colspan="2">
+                                       #{stageController.height}
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton 
+                                            update="formHeight :formSportCenter"
+                                            action="#{stageController.decreaseHeight}"
+                                            disabled="#{stageController.height eq 400}"
+                                            icon="fa fa-fw fa-minus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="2">
+                                       <p:commandLink value="Aceptar"
+                                                      action="#{stageController.editHeightOk}"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       update="formHeight :formSportCenter"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                    <p:column colspan="2">
+                                       <p:commandLink value="Cancelar"
+                                                      action="#{stageController.editHeightCancel}"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       update="formHeight"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            
+                        </h:form>
+                        
+                        <h:form id="formEndEditStage" style="margin-top:30px;">
+                            <p:commandButton 
+                                action="#{stageController.endEditStage}"
+                                update="formEndEditStage 
+                                :formNombre 
+                                :formMeasure 
+                                :formSportCenter 
+                                :formStageCSS 
+                                :formImage 
+                                :formRealWidthMeasure 
+                                :formRealLongMeasure 
+                                :formSports 
+                                :photoForm
+                                :uploadImageForm 
+                                :fileUploadForm"
+                                rendered="#{stageController.renderedEditStage()}" 
+                                value="finalizar editar" />
+                        </h:form>
+                        
+                        <h:form id="formNombre" style="margin-top:10px;" >
+                            <p:panelGrid rendered="#{stageController.renderedEditStage() and !stageController.editNombre}">
+                                <p:row>
+                                    <p:column>
+                                        #{stageController.stageSelected.escNombre}
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandLink title="editar"
+                                                       action="#{stageController.goEditName}"
+                                                      update="formNombre"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-edit"></i>
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid rendered="#{stageController.renderedEditStage() and stageController.editNombre}">
+                                <p:messages  closable="true" showDetail="true" >
+                                    <p:autoUpdate />
+                                </p:messages>
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <p:inputText style="width:100%;" value="#{stageController.nombre}" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:commandLink value="Aceptar"
+                                                       action="#{stageController.editNameOK}"
+                                                       update="formNombre"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandLink value="Cancelar" 
+                                                       action="#{stageController.editNameCancel}"
+                                                       update="formNombre"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </h:form>
+                        <h:form id="formImage" style="margin-top:10px;">
+                            <p:panelGrid rendered="#{stageController.renderedEditStage() and !stageController.editImage}" >
+                                <p:row>
+                                    <p:column>
+                                        <p:graphicImage value="/imageEsc?image=#{stageController.stageSelected.escImagen}"
+                                                                style="width: 100%;" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandLink title="editar"
+                                                       action="#{stageController.goChangeImageStage}"
+                                                      update="formImage"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-edit"></i>
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid rendered="#{stageController.renderedEditStage() and stageController.editImage}" >
+                                <p:row>
+                                    <p:column>
+                                        <p:fileUpload fileUploadListener="#{stageController.changeImageStageEvent}"  mode="advanced" dragDropSupport="false"
+                                                      update="formImage"
+                                                      label="Cargar" auto="true"  
+                                                      invalidFileMessage="Tipo de archivo no válido" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"                                            
+                                                      />                                        
+                                    </p:column>
+                                    
+                                </p:row>
+                                <p:column>
+                                        <p:outputLabel value="#{stageController.stageImage.fileName}"/>
+                                    </p:column>
+                                <p:row>
+                                    
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:commandLink value="Aceptar"
+                                                       action="#{stageController.changeImageStageOk}"
+                                                       update="formImage :formSportCenter"
+                                                       style="color: black;text-decoration: none !important;margin-right:10px;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                        <p:commandLink value="cancelar"
+                                                       action="#{stageController.changeImageStageCancel}"
+                                                       update="formImage"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </h:form>
                     </div>
-                </h:form>
+                    
+                    <div style="float: left;width:74%;">
+                        <h:form id="formSportCenter">
+                                <div style="position:relative;margin:0px auto; margin-top: 10px;width:900px;min-height: #{stageController.sportCenter.cenAlto}px;background-color: #{stageController.color};">
+                                    <ui:repeat value="#{stageController.stageList}" var="stage">
+                                        <p:commandLink 
+                                            update="formSportCenter 
+                                            :formNombre 
+                                            :formMeasure 
+                                            :formEndEditStage 
+                                            :formStageCSS 
+                                            :formImage 
+                                            :formRealWidthMeasure 
+                                            :formRealLongMeasure
+                                            :formSports
+                                            :photoForm
+                                            :uploadImageForm 
+                                            :fileUploadForm"
+                                            disabled="#{stageController.isStagedSelected(stage)}" 
+                                            action="#{stageController.stagedSelected(stage)}">
+                                            <div class="stage#{stage.escId}" title="#{stage.escNombre}">
+                                                <p:graphicImage  value="/imageEsc?image=#{stage.escImagen}"
+                                                                style="width: 100%; height:100%;" />
+                                            </div>
+                                        </p:commandLink>                     
+                                    </ui:repeat>                        
+                                </div>
+                        </h:form>
+                        
+                        <div style="position:relative;margin:0px auto;margin-top:10px;width:900px;">
+                            <div style="width:40%;float:left;">
+                                <h:form id="formRealWidthMeasure">
+                                    <p:panelGrid rendered="#{stageController.renderedEditStage() and  !stageController.editWidthMeasure and stageController.stageSelected.escEsReservable}">
+                                        <p:row>
+                                            <p:column>
+                                                Ancho (mts): #{stageController.stageSelected.escMedidaRealAncho}
+                                            </p:column>
+                                            <p:column>
+                                                <p:commandLink title="editar"
+                                                               action="#{stageController.goEditWidthMeasure}"
+                                                               update="formRealWidthMeasure"
+                                                               style="color: black;text-decoration: none !important;"
+                                                               onstart="PF('efectoCarga').show()"  
+                                                               onsuccess="PF('efectoCarga').hide()"
+                                                               >
+                                                    <i class="fa fa-fw fa-edit"></i>
+                                                </p:commandLink>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                    
+                                    <p:panelGrid rendered="#{stageController.renderedEditStage() and  stageController.editWidthMeasure and stageController.stageSelected.escEsReservable}">
+                                        <p:messages closable="true">
+                                            <p:autoUpdate />
+                                        </p:messages>
+                                        <p:row>
+                                            <p:column colspan="2">
+                                                Ancho (mts): <p:inputText value="#{stageController.widthMeasure}" 
+                                                                          converterMessage="Solo valores numericos" />
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Aceptar"
+                                                                 action="#{stageController.saveWidthMeasure}"
+                                                                 update="formRealWidthMeasure"
+                                                                 onstart="PF('efectoCarga').show()"  
+                                                                 onsuccess="PF('efectoCarga').hide()"
+                                                                 />
+                                            </p:column>
+                                            <p:column>
+                                                <p:commandButton value="Cancelar" 
+                                                                 action="#{stageController.cancelWidthMeasure}"
+                                                                 update="formRealWidthMeasure"
+                                                                 onstart="PF('efectoCarga').show()"  
+                                                                 onsuccess="PF('efectoCarga').hide()"
+                                                                 />
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                </h:form>
+                                <h:form id="formRealLongMeasure" style="margin-top:5px;">
+                                    <p:panelGrid rendered="#{stageController.renderedEditStage() and  !stageController.editLongMeasure and stageController.stageSelected.escEsReservable}">
+                                        <p:row>
+                                            <p:column>
+                                                Largo (mts): #{stageController.stageSelected.escMedidaRealLargo}
+                                            </p:column>
+                                            <p:column>
+                                                <p:commandLink title="editar"
+                                                               action="#{stageController.goEditLongMeasure}"
+                                                               update="formRealLongMeasure"
+                                                               style="color: black;text-decoration: none !important;"
+                                                               onstart="PF('efectoCarga').show()"  
+                                                               onsuccess="PF('efectoCarga').hide()"
+                                                               >
+                                                    <i class="fa fa-fw fa-edit"></i>
+                                                </p:commandLink>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                    
+                                    <p:panelGrid rendered="#{stageController.renderedEditStage() and  stageController.editLongMeasure and stageController.stageSelected.escEsReservable}">
+                                        <p:messages closable="true">
+                                            <p:autoUpdate />
+                                        </p:messages>
+                                        <p:row>
+                                            <p:column colspan="2">
+                                                Largo (mts): <p:inputText value="#{stageController.longMeasure}" 
+                                                                          converterMessage="Solo valores numericos" />
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Aceptar"
+                                                                 action="#{stageController.saveLongMeasure}"
+                                                                 update="formRealLongMeasure"
+                                                                 onstart="PF('efectoCarga').show()"  
+                                                                 onsuccess="PF('efectoCarga').hide()"
+                                                                 />
+                                            </p:column>
+                                            <p:column>
+                                                <p:commandButton value="Cancelar" 
+                                                                 action="#{stageController.cancelLongMeasure}"
+                                                                 update="formRealLongMeasure"
+                                                                 onstart="PF('efectoCarga').show()"  
+                                                                 onsuccess="PF('efectoCarga').hide()"
+                                                                 />
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                </h:form>
+                                
+                                <h:form id="formSports">
+                                    <p:commandButton 
+                                        style="margin-top:5px;"
+                                        rendered="#{stageController.renderedEditStage() and stageController.stageSelected.escEsReservable}"
+                                        action="#{stageController.openDialogAddSport}"
+                                        update="addSport"
+                                        value="Deporte"
+                                        icon="fa fa-fw fa-plus"
+                                        />
+                                    
+                                    <p:dataTable
+                                        style="margin-top:5px;"
+                                        rendered="#{stageController.renderedEditStage() and stageController.sportsStageSelected.size() > 0 and stageController.stageSelected.escEsReservable}"
+                                        var="sport"
+                                        value="#{stageController.sportsStageSelected}"
+                                        
+                                        >
+                                        <p:column headerText="Nombre">
+                                            #{sport.depNombre}
+                                        </p:column>
+                                        <p:column headerText="Acción" style="text-align:center;">
+                                            <p:commandLink
+                                                action="#{stageController.openDeleteSport(sport)}"
+                                                style="color: black;text-decoration: none !important;"
+                                                onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                           >
+                                                <i class="fa fa-fw fa-trash"></i>
+                                            </p:commandLink>
+                                        </p:column>
+                                    </p:dataTable>
+                                    
+                                    <p:dialog id="deleteSport" header="Deporte" widgetVar="deleteSportDialog">
+                                        <p:messages closable="true" showDetail="true">
+                                            <p:autoUpdate />
+                                        </p:messages>
+                                        <p:panelGrid style="margin: 0px auto;">
+                                            <p:row>
+                                                <p:column>
+                                                    <p:commandButton 
+                                                        value="Aceptar"
+                                                        action="#{stageController.deleteSport}"
+                                                        onstart="PF('efectoCarga').show()"  
+                                                        onsuccess="PF('efectoCarga').hide()" />
+                                                    
+                                                </p:column>
+                                                <p:column>
+                                                    <p:commandButton 
+                                                        value="Cancelar"
+                                                        onclick="PF('deleteSportDialog').hide()"
+                                                        onstart="PF('efectoCarga').show()"  
+                                                        onsuccess="PF('efectoCarga').hide()" />
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </p:dialog>
+                                    
+                                    <p:dialog id="addSport" header="Deporte" widgetVar="addSportDialog">
+                                        <p:panelGrid>
+                                            <p:messages closable="true" showDetail="true">
+                                                <p:autoUpdate />
+                                            </p:messages>
+                                            <p:row>
+                                                <p:column colspan="2">
+                                                    <p:selectOneMenu 
+                                                        value="#{stageController.sport}" 
+                                                        converter="selectOneMenuConverter">
+                                                        <f:selectItems 
+                                                            var="sport" 
+                                                            value="#{stageController.sports}" 
+                                                            itemValue="#{sport}" itemLabel="#{sport.depNombre}" />
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column>
+                                                    <p:commandButton 
+                                                        action="#{stageController.addSportOK}"
+                                                        value="Aceptar"
+                                                        onstart="PF('efectoCarga').show()"  
+                                                        onsuccess="PF('efectoCarga').hide()"
+                                                        />
+                                                </p:column>
+                                                <p:column>
+                                                    <p:commandButton 
+                                                        onclick="PF('addSportDialog').hide()"
+                                                        value="Cancelar" />
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </p:dialog >
+                                </h:form>
+                            </div>
+                            <div style="width:60%;float:left;">
+                                <h:form  id="photoForm" style="width:100%;">
+                                    <p:panelGrid style="width:100%;" rendered="#{stageController.renderedEditStage() and !stageController.editPhotos and stageController.stageSelected.escEsReservable}">
+                                        <p:row>
+                                            <p:column style="width:70%;">
+
+                                                <p:galleria  value="#{stageController.stagePhotos}" var="stagePhoto" 
+                                                             panelWidth="400" panelHeight="200"
+                                                            >
+                                                    <p:graphicImage style="width: 100%;height: 100%;"
+                                                                    value="/photoEsc?photo=#{stagePhoto.escFotNombre}" 
+                                                                    />
+                                                </p:galleria>
+                                            </p:column>
+                                            <p:column>
+                                                <p:commandLink title="editar"  style="color: black;text-decoration: none !important;"
+                                                                action="#{stageController.editPhotosActive}"
+                                                                update="photoForm :fileUploadForm :uploadImageForm"
+                                                               onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                               >
+                                                    <i class="fa fa-fw fa-edit"></i>
+                                                </p:commandLink>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                </h:form>
+                                
+                                <div style="width:100%; margin: 0px auto; margin-top: 10px;">
+                                    <h:form id="fileUploadForm">
+                                        <p:messages showDetail="true" closable="true"/>
+                                        <p:fileUpload
+                                            rendered="#{stageController.renderedEditStage() and stageController.editPhotos and stageController.stageSelected.escEsReservable}"
+                                            style="width: 100%;" 
+                                            fileUploadListener="#{stageController.cargarFoto}" 
+                                            mode="advanced"
+                                            auto="true"
+                                            update="fileUploadForm :uploadImageForm"
+                                            dragDropSupport="false"
+                                            label="cargar"
+                                            allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                            onstart="PF('efectoCarga').show()"  
+                                            oncomplete="PF('efectoCarga').hide()"
+                                            />
+                                    </h:form>
+                                    
+                                    <h:form id="uploadImageForm">
+                                        <p:panelGrid style="width: 100%;" rendered="#{stageController.renderedEditStage() and stageController.editPhotos and stageController.stageSelected.escEsReservable}">
+                                            <p:row>
+                                                <p:column style="width: 90%;">
+                                                    <div style="width:100%;height:200px;">
+                                                        <p:repeat value="#{stageController.editStagePhotos}" 
+                                                                  var="stagePhoto"
+                                                                  >
+                                                            <div style="border: 1px #000000 solid; width: 165px;height:100px;float: left; margin-left:5px; margin-bottom: 10px;">
+                                                                <p:graphicImage style="width: 100%;height: 80%;"
+                                                                                value="/photoEsc?photo=#{stagePhoto.escFotNombre}" 
+                                                                                />
+                                                                <div style="text-align: center;width: 100%; height: 20%;">
+                                                                    <p:commandLink 
+                                                                                   title="Eliminar" 
+                                                                                   action="#{stageController.openDeleteImagenDialog(stagePhoto)}"
+                                                                                   style="color: black;text-decoration: none !important;">
+                                                                        <i class="fa fa-fw fa-trash"></i>
+                                                                    </p:commandLink>
+                                                                </div>
+                                                            </div>
+                                                        </p:repeat>
+                                                    </div>
+                                                </p:column>
+                                                <p:column style="width: 10%;">
+                                                    <p:commandLink value="Aceptar"  style="color: black;text-decoration: none !important;"
+                                                                   action="#{stageController.editPhotosOk}"
+                                                                   update=":photoForm uploadImageForm :fileUploadForm"
+                                                                   onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                                   />
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:dialog resizable="false"   header="Eliminar" position="center" modal="true"  widgetVar="deleteImagenDialog" >
+                                            <p:panelGrid id="deleteImagenPanel" style="text-align:left;" styleClass="panelgrid">
+                                                <p:row>
+                                                    <p:column>
+                                                        <p:messages showDetail="true" >
+                                                            <p:autoUpdate/>
+                                                        </p:messages>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="text-align: center;">
+                                                        <p:commandButton
+                                                            action="#{stageController.deleteImagen}"
+                                                            value="Aceptar"
+                                                            update="uploadImageForm"
+                                                            onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                                            />
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>
+                                        </p:dialog>
+
+                                        <p:dialog resizable="false"   header="Eliminar" position="center" modal="true"  widgetVar="deleteImageResultDialog" >
+                                            <p:panelGrid id="deleteImageResultPanel" style="text-align:left;" styleClass="panelgrid">
+                                                <p:row>
+                                                    <p:column>
+                                                        <p:messages showDetail="true" >
+                                                            <p:autoUpdate/>
+                                                        </p:messages>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="text-align: center;">
+                                                        <p:commandButton
+                                                            value="Aceptar"
+                                                            onclick="PF('deleteImageResultDialog').hide()"
+                                                            />
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>
+                                        </p:dialog>
+                                    </h:form>
+                                </div>
+                            </div>
+                            <div style="clear:both;" />
+                        </div>
+                        
+                        
+                    </div>
+                     
+                    <div style="float: left;width:13%;">
+                        <h:form id="formMeasure" style="margin-top: 5px;">
+                            <p:panelGrid rendered="#{stageController.renderedEditStage() and !stageController.editMeasure}">
+                                <p:row>
+                                    <p:column>
+                                        Ancho : #{stageController.stageSelected.escImagenAncho} px
+                                    </p:column>
+                                    <p:column rowspan="5">
+                                        <p:commandLink title="editar"
+                                                       action="#{stageController.goEditMeasure}"
+                                                       update="formMeasure"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       >
+                                            <i class="fa fa-fw fa-edit"></i>
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:row>
+                                 <p:row>
+                                    <p:column>
+                                        Alto: #{stageController.stageSelected.escImagenLargo} px
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        Superior: #{stageController.stageSelected.escImagenMagenSuperior} px
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        Izquierda: #{stageController.stageSelected.escImagenMagenIzquierda} px
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        Angulo: #{stageController.stageSelected.escImagenAngulo} 
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid rendered="#{stageController.renderedEditStage() and stageController.editMeasure}">
+                                
+                                <p:row>
+                                    <p:column rowspan="2" >
+                                        Ancho: #{stageController.stageWidth}px
+                                    </p:column>
+                                    <p:column >
+                                        <p:commandButton
+                                            disabled="#{(stageController.stageSelected.escImagenAncho + stageController.stageSelected.escImagenMagenIzquierda) gt 899}"
+                                            action="#{stageController.increaseWidthStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-plus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:commandButton
+                                            disabled="#{stageController.stageSelected.escImagenAncho eq 0}"
+                                            action="#{stageController.decreaseWidthStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-minus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column rowspan="2" >
+                                        Alto: #{stageController.stageHeight}px
+                                    </p:column>
+                                    <p:column >
+                                        <p:commandButton
+                                            disabled="#{(stageController.stageSelected.escImagenLargo + stageController.stageSelected.escImagenMagenSuperior) gt (stageController.sportCenter.cenAlto - 1)}"
+                                            action="#{stageController.increaseHeightStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-plus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:commandButton
+                                            disabled="#{stageController.stageSelected.escImagenLargo eq 0}"
+                                            action="#{stageController.decreaseHeightStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-minus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align:center;" colspan="2">
+                                        Margen Superior
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column rowspan="2" >
+                                        #{stageController.stageMarginUp}px
+                                    </p:column>
+                                    <p:column >
+                                        <p:commandButton
+                                            disabled="#{(stageController.stageSelected.escImagenLargo + stageController.stageSelected.escImagenMagenSuperior) gt (stageController.sportCenter.cenAlto - 1)}"
+                                            action="#{stageController.increaseMarginUpStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-plus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:commandButton
+                                            disabled="#{stageController.stageSelected.escImagenMagenSuperior eq 0}"
+                                            action="#{stageController.decreaseMarginUpStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-minus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <p:commandButton style="font-size: 5pt;" 
+                                                         value="Arriba"
+                                                         update="formMeasure :formStageCSS"
+                                                         action="#{stageController.goUpMarginUpStage}"
+                                                         />
+                                        <p:commandButton style="font-size: 5pt;" 
+                                                         value="Centro"
+                                                         update="formMeasure :formStageCSS"
+                                                         action="#{stageController.goCenterMarginUpStage}"
+                                                         />
+                                        <p:commandButton style="font-size: 5pt;" 
+                                                         value="Abajo"
+                                                         update="formMeasure :formStageCSS"
+                                                         action="#{stageController.goDownMarginUpStage()}"
+                                                         />
+                                          
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="text-align:center;" colspan="2">
+                                        Margen Izquierda
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column rowspan="2" >
+                                        #{stageController.stageMarginLeft}px
+                                    </p:column>
+                                    <p:column >
+                                        <p:commandButton
+                                            disabled="#{(stageController.stageSelected.escImagenAncho + stageController.stageSelected.escImagenMagenIzquierda) gt 899}"
+                                            action="#{stageController.increaseMarginLeftStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-plus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:commandButton
+                                            disabled="#{stageController.stageSelected.escImagenMagenIzquierda eq 0}"
+                                            action="#{stageController.decreaseMarginLeftStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-minus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <p:commandButton style="font-size: 5pt;" 
+                                                         value="Izquierda"
+                                                         action="#{stageController.goLeftMarginleftStage}"
+                                                         update="formMeasure :formStageCSS"
+                                                         />
+                                        <p:commandButton style="font-size: 5pt;" 
+                                                         value="Centro"
+                                                         action="#{stageController.goCenterMarginLeftStage}"
+                                                         update="formMeasure :formStageCSS"
+                                                         />
+                                        <p:commandButton style="font-size: 5pt;" 
+                                                         value="Derecha"
+                                                         action="#{stageController.goRightMarginLeftStage}"
+                                                         update="formMeasure :formStageCSS"
+                                                         />
+                                          
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column rowspan="2" >
+                                        Angulo: #{stageController.stageAngle}
+                                    </p:column>
+                                    <p:column >
+                                        <p:commandButton
+                                            action="#{stageController.increaseAngleStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-plus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:commandButton
+                                            action="#{stageController.decreaseAngleStage}"
+                                            update="formMeasure :formStageCSS"
+                                            icon="fa fa-fw fa-minus" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:commandLink value="Aceptar"
+                                                       action="#{stageController.editMeasureOk}"
+                                                       update="formMeasure"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandLink value="Cancelar"
+                                                       action="#{stageController.editMeasureCancel}"
+                                                       update="formMeasure :formStageCSS"
+                                                       style="color: black;text-decoration: none !important;"
+                                                       onstart="PF('efectoCarga').show()"  
+                                                       onsuccess="PF('efectoCarga').hide()"
+                                                       />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </h:form>
+                        
+                    </div>
+                    <div style="clear: both;"/>
+                    
+                    
+                    <!-- formularios-->
+                    
+                    <h:form id="formAddStage">
+                        <p:dialog resizable="false" 
+                                  header="Escenario" 
+                                  position="center" 
+                                  modal="true"  
+                                  widgetVar="addStageDialog" >
+                            <p:messages closable="true" showDetail="true" >
+                                <p:autoUpdate />
+                            </p:messages>
+                            
+                        <p:panelGrid id="addStagePanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText  value="#{stageController.nombre}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:column>
+                                    
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton action="#{stageController.saveStage}"
+                                        value="Registrar" update="formAddStage:addStagePanel :formSportCenter :formStageCSS"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        </p:dialog>
+                        
+                    </h:form>
+                    
+                    <h:form id="formAddObject">
+                        <p:dialog resizable="false" 
+                                  header="Objeto" 
+                                  position="center" 
+                                  modal="true"  
+                                  widgetVar="addObjectDialog" >
+                            <p:messages closable="true" showDetail="true" >
+                                <p:autoUpdate />
+                            </p:messages>
+                            
+                        <p:panelGrid id="addObjectPanel" style="text-align:left;" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Nombre:" />
+                                    <p:outputLabel style="color:red;"  value=" * " />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText  value="#{stageController.nombre}"
+                                                 />
+                                </p:column>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:column>
+                                    
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton action="#{stageController.saveObject}"
+                                        value="Registrar" update="formAddObject:addObjectPanel :formSportCenter :formStageCSS"
+                                        onstart="PF('efectoCarga').show()"  onsuccess="PF('efectoCarga').hide()"
+                                        />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        </p:dialog>
+                        
+                    </h:form>
+                   
+                </div>
             </ui:define>
         </ui:composition>
 

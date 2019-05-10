@@ -57,10 +57,19 @@ public class ProductoFacade extends AbstractFacade<Producto>{
         return resultList!=null && resultList.size()>0;
     }
     
-     public List<Producto> findProductByColumn(String search)
+     public List<Producto> findProductByColumn(Long cenId,String search)
     {
         Query query = getEntityManager().createNamedQuery("Producto.findByColumn");
+        query.setParameter("cenId", cenId);
         query.setParameter("prodNombre", "%" + search + "%");
+        List<Producto> resultList = query.getResultList();
+        return resultList;
+    }
+     
+    public List<Producto> findProductByCenIdOrderbyName(Long cenId)
+    {
+        Query query = getEntityManager().createNamedQuery("Producto.findProductByCenIdOrderbyName");
+        query.setParameter("cenId", cenId);
         List<Producto> resultList = query.getResultList();
         return resultList;
     }
