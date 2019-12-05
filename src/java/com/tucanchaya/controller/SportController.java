@@ -8,7 +8,6 @@ package com.tucanchaya.controller;
 import com.tucanchaya.entities.Deporte;
 import com.tucanchaya.entities.Escenario;
 import com.tucanchaya.facade.DeporteFacade;
-import com.tucanchaya.facade.EscenariodeporteFacade;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
@@ -28,8 +27,6 @@ public class SportController implements Serializable{
     
     @EJB
     private DeporteFacade sportEJB;
-    @EJB
-    private EscenariodeporteFacade stageSportEJB;
     private List<Deporte> sports;
     private String sport;
     private String nombre;
@@ -144,15 +141,8 @@ public class SportController implements Serializable{
     {
         RequestContext requestContext = RequestContext.getCurrentInstance();  
         sports=null;
-        List<Escenario> stages = stageSportEJB.findEscByDepId(sportSelected.getDepId());
-        if(stages==null || stages.isEmpty())
-        {
-            sportEJB.remove(sportSelected);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Deporte eliminado correctamente."));
-        }
-        else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "No se puede eliminar el deporte."));
-        }
+        sportEJB.remove(sportSelected);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Deporte eliminado correctamente."));
         requestContext.execute("PF('deteletSportDialog').hide()");
         requestContext.execute("PF('deteletSportResultDialog').show()");
     }

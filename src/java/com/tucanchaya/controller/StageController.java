@@ -10,14 +10,11 @@ import com.tucanchaya.entities.Centrodeportivo;
 import com.tucanchaya.entities.Color;
 import com.tucanchaya.entities.Deporte;
 import com.tucanchaya.entities.Escenario;
-import com.tucanchaya.entities.Escenariodeporte;
-import com.tucanchaya.entities.EscenariodeportePK;
 import com.tucanchaya.entities.Escenariofotos;
 import com.tucanchaya.facade.CentrodeportivoFacade;
 import com.tucanchaya.facade.ColorFacade;
 import com.tucanchaya.facade.DeporteFacade;
 import com.tucanchaya.facade.EscenarioFacade;
-import com.tucanchaya.facade.EscenariodeporteFacade;
 import com.tucanchaya.facade.EscenariofotosFacade;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -57,8 +54,6 @@ public class StageController implements Serializable{
     private EscenarioFacade stageEJB;
     @EJB
     private DeporteFacade sportEJB;
-    @EJB
-    private EscenariodeporteFacade stageSportEJB;
     @EJB
     private EscenariofotosFacade stagePhotosEJB;
     
@@ -275,16 +270,6 @@ public class StageController implements Serializable{
         }
         return "#BDBDBD";
     }
-
-    public List<Deporte> getSportsStageSelected() {
-        if(sportsStageSelected == null)
-        {
-            sportsStageSelected = stageSportEJB.findDepByEscId(stageSelected.getEscId());
-        }
-        return sportsStageSelected;
-    }
-    
-    
     
     public void goEditColor()
     {
@@ -780,55 +765,6 @@ public class StageController implements Serializable{
     {
         longMeasure = null;
         editLongMeasure = false;
-    }
-    
-    public void openDialogAddSport(){
-       RequestContext requestContext = RequestContext.getCurrentInstance();
-       this.sport = null;
-       requestContext.execute("PF('addSportDialog').show()");  
-    }
-    
-    public void addSportOK()
-    {
-        if(sportsStageSelected!= null && !sportsStageSelected.isEmpty())
-        {
-            for(Deporte s: sportsStageSelected)
-            {
-                if(s.getDepId().equals(sport.getDepId()))
-                {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "El deporte ya se ecuentra en la lista."));
-                    return;
-                }
-            }
-        }
-        Escenariodeporte escenariodeporte = new Escenariodeporte();
-        EscenariodeportePK escenariodeportePK = new EscenariodeportePK(stageSelected.getEscId(),sport.getDepId());
-        escenariodeporte.setEscenariodeportePK(escenariodeportePK);
-        escenariodeporte.setDeporte(sport);
-        escenariodeporte.setEscenario(stageSelected);
-        stageSportEJB.create(escenariodeporte);
-        sportsStageSelected = null;
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("PF('addSportDialog').hide()");
-        requestContext.update("formSports");
-    }
-    
-    public void openDeleteSport(Deporte sport)
-    {
-        sportSelected = sport;
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", "Desea eliminar el deporte de la lista?."));
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("PF('deleteSportDialog').show()");
-    }
-    
-    public void deleteSport(){
-        EscenariodeportePK escenariodeportePK = new EscenariodeportePK(stageSelected.getEscId(),sportSelected.getDepId());
-        Escenariodeporte escenariodeporte = new Escenariodeporte(escenariodeportePK);
-        stageSportEJB.remove(escenariodeporte);
-        sportsStageSelected = null;
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("PF('deleteSportDialog').hide()");
-        requestContext.update("formSports");
     }
     
     public List<Escenariofotos> getStagePhotos() {

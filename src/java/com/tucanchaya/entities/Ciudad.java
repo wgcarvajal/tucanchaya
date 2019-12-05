@@ -124,7 +124,7 @@ public class Ciudad implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Ciudad[ ciuId=" + ciuId + " ]";
+        return "com.tucanchaya.entities.Ciudad[ ciuId=" + ciuId + " ]";
     }
     
 }

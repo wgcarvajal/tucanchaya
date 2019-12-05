@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -87,11 +86,16 @@ public class Escenario implements Serializable {
     private boolean escEsReservable;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "escId")
     private List<Escenariofotos> escenariofotosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "escenario")
-    private List<Escenariodeporte> escenariodeporteList;
     @JoinColumn(name = "cenId", referencedColumnName = "cenId")
     @ManyToOne(optional = false)
     private Centrodeportivo cenId;
+    @JoinColumn(name = "depId", referencedColumnName = "depId")
+    @ManyToOne(optional = false)
+    private Deporte depId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "escId")
+    private List<Escenariocompuesto> escenariocompuestoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "escCompId")
+    private List<Escenariocompuesto> escenariocompuestoList1;
 
     public Escenario() {
     }
@@ -193,7 +197,7 @@ public class Escenario implements Serializable {
     public void setEscEstado(Integer escEstado) {
         this.escEstado = escEstado;
     }
-    
+
     public boolean getEscEsReservable() {
         return escEsReservable;
     }
@@ -211,21 +215,38 @@ public class Escenario implements Serializable {
         this.escenariofotosList = escenariofotosList;
     }
 
-    @XmlTransient
-    public List<Escenariodeporte> getEscenariodeporteList() {
-        return escenariodeporteList;
-    }
-
-    public void setEscenariodeporteList(List<Escenariodeporte> escenariodeporteList) {
-        this.escenariodeporteList = escenariodeporteList;
-    }
-
     public Centrodeportivo getCenId() {
         return cenId;
     }
 
     public void setCenId(Centrodeportivo cenId) {
         this.cenId = cenId;
+    }
+
+    public Deporte getDepId() {
+        return depId;
+    }
+
+    public void setDepId(Deporte depId) {
+        this.depId = depId;
+    }
+
+    @XmlTransient
+    public List<Escenariocompuesto> getEscenariocompuestoList() {
+        return escenariocompuestoList;
+    }
+
+    public void setEscenariocompuestoList(List<Escenariocompuesto> escenariocompuestoList) {
+        this.escenariocompuestoList = escenariocompuestoList;
+    }
+
+    @XmlTransient
+    public List<Escenariocompuesto> getEscenariocompuestoList1() {
+        return escenariocompuestoList1;
+    }
+
+    public void setEscenariocompuestoList1(List<Escenariocompuesto> escenariocompuestoList1) {
+        this.escenariocompuestoList1 = escenariocompuestoList1;
     }
 
     @Override
@@ -250,6 +271,6 @@ public class Escenario implements Serializable {
 
     @Override
     public String toString() {
-        return "test.Escenario[ escId=" + escId + " ]";
+        return "com.tucanchaya.entities.tucanchaya.entities.Escenario[ escId=" + escId + " ]";
     }
 }

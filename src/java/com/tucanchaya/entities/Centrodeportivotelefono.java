@@ -123,7 +123,7 @@ public class Centrodeportivotelefono implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Centrodeportivotelefono[ cenTelId=" + cenTelId + " ]";
+        return "com.tucanchaya.entities.Centrodeportivotelefono[ cenTelId=" + cenTelId + " ]";
     }
     
 }

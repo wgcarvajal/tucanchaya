@@ -125,7 +125,7 @@ public class Barrio implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Barrio[ barId=" + barId + " ]";
+        return "com.tucanchaya.entities.Barrio[ barId=" + barId + " ]";
     }
     
 }

@@ -17,50 +17,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author aranda
- */
 @Entity
-@Table(name = "usuariogrupo", catalog = "tucanchaya", schema = "")
+@Table(name = "centrodeportivodeporte", catalog = "tucanchaya", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuariogrupo.findAll", query = "SELECT u FROM Usuariogrupo u"),
-    @NamedQuery(name = "Usuariogrupo.findByUsuNombreUsuario", query = "SELECT u FROM Usuariogrupo u WHERE u.usuNombreUsuario = :usuNombreUsuario")})
-public class Usuariogrupo implements Serializable {
-
+    @NamedQuery(name = "Centrodeportivodeporte.findAll", query = "SELECT c FROM Centrodeportivodeporte c"),
+    @NamedQuery(name = "Centrodeportivodeporte.findById", query = "SELECT c FROM Centrodeportivodeporte c WHERE c.id = :id")})
+public class Centrodeportivodeporte implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 75)
-    @Column(name = "usuNombreUsuario")
-    private String usuNombreUsuario;
-    @JoinColumn(name = "gruId", referencedColumnName = "gruId")
+    @JoinColumn(name = "cenId", referencedColumnName = "cenId")
     @ManyToOne(optional = false)
-    private Grupo gruId;
-    @JoinColumn(name = "usuId", referencedColumnName = "usuId")
+    private Centrodeportivo cenId;
+    @JoinColumn(name = "depId", referencedColumnName = "depId")
     @ManyToOne(optional = false)
-    private Usuario usuId;
+    private Deporte depId;
 
-    public Usuariogrupo() {
+    public Centrodeportivodeporte() {
     }
 
-    public Usuariogrupo(Long id) {
+    public Centrodeportivodeporte(Long id) {
         this.id = id;
-    }
-
-    public Usuariogrupo(Long id, String usuNombreUsuario) {
-        this.id = id;
-        this.usuNombreUsuario = usuNombreUsuario;
     }
 
     public Long getId() {
@@ -71,28 +55,20 @@ public class Usuariogrupo implements Serializable {
         this.id = id;
     }
 
-    public String getUsuNombreUsuario() {
-        return usuNombreUsuario;
+    public Centrodeportivo getCenId() {
+        return cenId;
     }
 
-    public void setUsuNombreUsuario(String usuNombreUsuario) {
-        this.usuNombreUsuario = usuNombreUsuario;
+    public void setCenId(Centrodeportivo cenId) {
+        this.cenId = cenId;
     }
 
-    public Grupo getGruId() {
-        return gruId;
+    public Deporte getDepId() {
+        return depId;
     }
 
-    public void setGruId(Grupo gruId) {
-        this.gruId = gruId;
-    }
-
-    public Usuario getUsuId() {
-        return usuId;
-    }
-
-    public void setUsuId(Usuario usuId) {
-        this.usuId = usuId;
+    public void setDepId(Deporte depId) {
+        this.depId = depId;
     }
 
     @Override
@@ -105,10 +81,10 @@ public class Usuariogrupo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuariogrupo)) {
+        if (!(object instanceof Centrodeportivodeporte)) {
             return false;
         }
-        Usuariogrupo other = (Usuariogrupo) object;
+        Centrodeportivodeporte other = (Centrodeportivodeporte) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -117,7 +93,7 @@ public class Usuariogrupo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tucanchaya.entities.Usuariogrupo[ id=" + id + " ]";
+        return "com.tucanchaya.entities.Centrodeportivodeporte[ id=" + id + " ]";
     }
     
 }

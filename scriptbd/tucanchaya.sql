@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 10-05-2019 a las 01:53:45
+-- Tiempo de generación: 05-12-2019 a las 05:29:36
 -- Versión del servidor: 5.7.16
--- Versión de PHP: 5.6.30
+-- Versión de PHP: 7.1.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -32,6 +32,12 @@ CREATE TABLE `barrio` (
   `barNombre` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `barrio`
+--
+
+INSERT INTO `barrio` (`barId`, `ciuId`, `barNombre`) VALUES
+(2, 2, 'Las granjas');
 
 -- --------------------------------------------------------
 
@@ -62,6 +68,24 @@ CREATE TABLE `centrodeportivo` (
   `cenAlto` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `centrodeportivo`
+--
+
+INSERT INTO `centrodeportivo` (`cenId`, `barId`, `colorId`, `cenNit`, `cenNombre`, `cenDireccion`, `cenUbicacion`, `cenDescripcion`, `cenAlto`) VALUES
+(1, 2, 4, NULL, '8 gol', 'Cr 6 # 26-17', '{\"lat\":\"2.943236654591834\",\"long\": \"-75.29219414022396\"}', NULL, 500);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `centrodeportivodeporte`
+--
+
+CREATE TABLE `centrodeportivodeporte` (
+  `id` bigint(20) NOT NULL,
+  `cenId` bigint(20) NOT NULL,
+  `depId` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -76,6 +100,13 @@ CREATE TABLE `centrodeportivofotos` (
   `cenFotPrincipal` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `centrodeportivofotos`
+--
+
+INSERT INTO `centrodeportivofotos` (`cenFotId`, `cenId`, `cenFoNombre`, `cenFotPrincipal`) VALUES
+(1, 1, '1/1.png', 0),
+(2, 1, '1/2.png', 1);
 
 -- --------------------------------------------------------
 
@@ -90,6 +121,12 @@ CREATE TABLE `centrodeportivotelefono` (
   `cenTelTipo` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `centrodeportivotelefono`
+--
+
+INSERT INTO `centrodeportivotelefono` (`cenTelId`, `cenId`, `cenTelNumero`, `cenTelTipo`) VALUES
+(1, 1, '3182785398', 'c');
 
 -- --------------------------------------------------------
 
@@ -128,7 +165,7 @@ CREATE TABLE `color` (
 --
 
 INSERT INTO `color` (`colorId`, `colorHexadecimal`, `colorNombre`) VALUES
-(1, '#A4A4A4', 'Gris');
+(4, '#A4A4A4', 'Gris');
 
 -- --------------------------------------------------------
 
@@ -146,9 +183,9 @@ CREATE TABLE `deporte` (
 --
 
 INSERT INTO `deporte` (`depId`, `depNombre`) VALUES
-(1, 'Futbol 5'),
-(2, 'Futbol 11'),
-(3, 'Baloncesto');
+(2, 'Futbol 5'),
+(4, 'Futbol 11'),
+(5, 'Baloncesto');
 
 -- --------------------------------------------------------
 
@@ -159,6 +196,7 @@ INSERT INTO `deporte` (`depId`, `depNombre`) VALUES
 CREATE TABLE `escenario` (
   `escId` bigint(20) NOT NULL,
   `cenId` bigint(20) NOT NULL,
+  `depId` bigint(20) NOT NULL,
   `escNombre` varchar(150) NOT NULL,
   `escMedidaRealAncho` float DEFAULT NULL,
   `escMedidaRealLargo` float DEFAULT NULL,
@@ -172,17 +210,35 @@ CREATE TABLE `escenario` (
   `escEsReservable` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `escenario`
+--
+
+INSERT INTO `escenario` (`escId`, `cenId`, `depId`, `escNombre`, `escMedidaRealAncho`, `escMedidaRealLargo`, `escImagenAncho`, `escImagenLargo`, `escImagenAngulo`, `escImagenMagenSuperior`, `escImagenMagenIzquierda`, `escImagen`, `escEstado`, `escEsReservable`) VALUES
+(6, 1, 2, 'Cancha', 3.5, 10.2, 200, 320, 0, 10, 10, '6/1.jpg', NULL, 1),
+(7, 1, 2, 'Cancha 2', NULL, NULL, 200, 320, 0, 10, 214, '7/1.jpg', NULL, 1),
+(8, 1, 2, 'Cancha 3', NULL, NULL, 320, 160, 0, 10, 421, '8/1.jpg', NULL, 1),
+(9, 1, 2, 'Cancha 4', NULL, NULL, 320, 156, 0, 174, 421, '9/1.jpg', NULL, 1),
+(10, 1, 2, 'Parquadero', NULL, NULL, 288, 138, 0, 362, 0, '10/1.png', NULL, 0),
+(11, 1, 2, 'Mesa', NULL, NULL, 60, 60, 0, 356, 375, '11/1.png', NULL, 0),
+(12, 1, 2, 'Mesa 2', NULL, NULL, 60, 60, 0, 359, 504, '12/1.png', NULL, 0),
+(13, 1, 2, 'Mesa 3', NULL, NULL, 60, 60, 0, 359, 675, '13/1.png', NULL, 0),
+(14, 1, 2, 'Baño', NULL, NULL, 70, 60, 0, 431, 434, '14/1.jpg', NULL, 0),
+(15, 1, 2, 'Baño 2', NULL, NULL, 70, 60, 0, 24, 823, '15/1.jpg', NULL, 0),
+(16, 1, 2, 'Tienda', NULL, NULL, 100, 90, 0, 200, 792, '16/1.png', NULL, 0),
+(17, 1, 2, 'Mesa 4', NULL, NULL, 60, 60, 0, 359, 806, '17/1.png', NULL, 0);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `escenariodeporte`
+-- Estructura de tabla para la tabla `escenariocompuesto`
 --
 
-CREATE TABLE `escenariodeporte` (
-  `escId` bigint(20) NOT NULL,
-  `depId` bigint(20) NOT NULL
+CREATE TABLE `escenariocompuesto` (
+  `id` bigint(20) NOT NULL,
+  `escCompId` bigint(20) NOT NULL,
+  `escId` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 -- --------------------------------------------------------
 
@@ -196,6 +252,12 @@ CREATE TABLE `escenariofotos` (
   `escFotNombre` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `escenariofotos`
+--
+
+INSERT INTO `escenariofotos` (`escFotId`, `escId`, `escFotNombre`) VALUES
+(5, 6, '6/5.png');
 
 -- --------------------------------------------------------
 
@@ -265,7 +327,17 @@ CREATE TABLE `usuario` (
   `usuActivo` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
+--
+-- Volcado de datos para la tabla `usuario`
+--
 
+INSERT INTO `usuario` (`usuId`, `cenId`, `usuIdentificacion`, `usuNombres`, `usuApellidos`, `usuNombreUsuario`, `usuContrasena`, `usuEmail`, `usuDireccion`, `usuTelefono`, `usuActivo`) VALUES
+(1, NULL, '1075220291', 'Wilson', 'Carvajal', 'wgcarvajal', '123456', 'wilnacio@hotmail.com', NULL, NULL, 0),
+(2, NULL, '89418923', 'Daniel', 'Cepeda', 'dcepeda', '123456', 'dcepeda@gmail.com', NULL, NULL, 0),
+(3, 1, '4534234', 'Deisy', 'Pineros', 'deistypt', '123456', 'deistypt@gmail.com', NULL, NULL, 0),
+(5, NULL, '102390483', 'Maria Juliana', 'Carvajal Piñeros', 'maju', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'maju@gmail.com', '', '', 0),
+(6, NULL, '348093', 'Samuel', 'Arturo', 'samu', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'samu@gmail.com', '', '', 0),
+(7, 1, '234231', 'benito', 'carva', 'benitocarva', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'benitocarva@gmail.com', 'rtreterr', '3432', 0);
 
 -- --------------------------------------------------------
 
@@ -280,6 +352,17 @@ CREATE TABLE `usuariogrupo` (
   `usuId` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `usuariogrupo`
+--
+
+INSERT INTO `usuariogrupo` (`id`, `usuNombreUsuario`, `gruId`, `usuId`) VALUES
+(1, 'wgcarvajal', 'superAdmin', 1),
+(2, 'dcepeda', 'superAdmin', 2),
+(3, 'deisypt', 'user', 3),
+(4, 'maju', 'superAdmin', 5),
+(5, 'samu', 'superAdmin', 6),
+(6, 'benitocarva', 'user', 7);
 
 --
 -- Índices para tablas volcadas
@@ -305,6 +388,14 @@ ALTER TABLE `centrodeportivo`
   ADD PRIMARY KEY (`cenId`),
   ADD KEY `fk_centrodeportivo_color` (`colorId`),
   ADD KEY `fk_centrodeportivo_barrio` (`barId`);
+
+--
+-- Indices de la tabla `centrodeportivodeporte`
+--
+ALTER TABLE `centrodeportivodeporte`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_centrodeportivodeporte_centrodeportivo` (`cenId`),
+  ADD KEY `fk_centrodeportivodeporte_deporte` (`depId`);
 
 --
 -- Indices de la tabla `centrodeportivofotos`
@@ -343,14 +434,16 @@ ALTER TABLE `deporte`
 --
 ALTER TABLE `escenario`
   ADD PRIMARY KEY (`escId`),
-  ADD KEY `fk_centrodeportivo_escenario` (`cenId`);
+  ADD KEY `fk_centrodeportivo_escenario` (`cenId`),
+  ADD KEY `fk_escenario_deporte` (`depId`);
 
 --
--- Indices de la tabla `escenariodeporte`
+-- Indices de la tabla `escenariocompuesto`
 --
-ALTER TABLE `escenariodeporte`
-  ADD PRIMARY KEY (`escId`,`depId`),
-  ADD KEY `fk_deporte_escenariodeporte` (`depId`);
+ALTER TABLE `escenariocompuesto`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_escenariocompuesto_escenario` (`escCompId`),
+  ADD KEY `fk_escenario_escenariocompuesto` (`escId`);
 
 --
 -- Indices de la tabla `escenariofotos`
@@ -403,27 +496,32 @@ ALTER TABLE `usuariogrupo`
 -- AUTO_INCREMENT de la tabla `barrio`
 --
 ALTER TABLE `barrio`
-  MODIFY `barId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `barId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `catId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `catId` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivo`
 --
 ALTER TABLE `centrodeportivo`
-  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `cenId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `centrodeportivodeporte`
+--
+ALTER TABLE `centrodeportivodeporte`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivofotos`
 --
 ALTER TABLE `centrodeportivofotos`
-  MODIFY `cenFotId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `cenFotId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `centrodeportivotelefono`
 --
 ALTER TABLE `centrodeportivotelefono`
-  MODIFY `cenTelId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `cenTelId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
@@ -433,42 +531,42 @@ ALTER TABLE `ciudad`
 -- AUTO_INCREMENT de la tabla `color`
 --
 ALTER TABLE `color`
-  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `deporte`
 --
 ALTER TABLE `deporte`
-  MODIFY `depId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `depId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `escenario`
 --
 ALTER TABLE `escenario`
-  MODIFY `escId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `escId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT de la tabla `escenariofotos`
 --
 ALTER TABLE `escenariofotos`
-  MODIFY `escFotId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `escFotId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `precio`
 --
 ALTER TABLE `precio`
-  MODIFY `precId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `precId` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `prodId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `prodId` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `usuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `usuId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `usuariogrupo`
 --
 ALTER TABLE `usuariogrupo`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- Restricciones para tablas volcadas
 --
@@ -487,6 +585,13 @@ ALTER TABLE `centrodeportivo`
   ADD CONSTRAINT `fk_centrodeportivo_color` FOREIGN KEY (`colorId`) REFERENCES `color` (`colorId`);
 
 --
+-- Filtros para la tabla `centrodeportivodeporte`
+--
+ALTER TABLE `centrodeportivodeporte`
+  ADD CONSTRAINT `fk_centrodeportivodeporte_centrodeportivo` FOREIGN KEY (`cenId`) REFERENCES `centrodeportivo` (`cenId`),
+  ADD CONSTRAINT `fk_centrodeportivodeporte_deporte` FOREIGN KEY (`depId`) REFERENCES `deporte` (`depId`);
+
+--
 -- Filtros para la tabla `centrodeportivofotos`
 --
 ALTER TABLE `centrodeportivofotos`
@@ -502,14 +607,15 @@ ALTER TABLE `centrodeportivotelefono`
 -- Filtros para la tabla `escenario`
 --
 ALTER TABLE `escenario`
-  ADD CONSTRAINT `fk_centrodeportivo_escenario` FOREIGN KEY (`cenId`) REFERENCES `centrodeportivo` (`cenId`);
+  ADD CONSTRAINT `fk_centrodeportivo_escenario` FOREIGN KEY (`cenId`) REFERENCES `centrodeportivo` (`cenId`),
+  ADD CONSTRAINT `fk_escenario_deporte` FOREIGN KEY (`depId`) REFERENCES `deporte` (`depId`);
 
 --
--- Filtros para la tabla `escenariodeporte`
+-- Filtros para la tabla `escenariocompuesto`
 --
-ALTER TABLE `escenariodeporte`
-  ADD CONSTRAINT `fk_deporte_escenariodeporte` FOREIGN KEY (`depId`) REFERENCES `deporte` (`depId`),
-  ADD CONSTRAINT `fk_escenario_escenariodeporte` FOREIGN KEY (`escId`) REFERENCES `escenario` (`escId`);
+ALTER TABLE `escenariocompuesto`
+  ADD CONSTRAINT `fk_escenario_escenariocompuesto` FOREIGN KEY (`escId`) REFERENCES `escenario` (`escId`),
+  ADD CONSTRAINT `fk_escenariocompuesto_escenario` FOREIGN KEY (`escCompId`) REFERENCES `escenario` (`escId`);
 
 --
 -- Filtros para la tabla `escenariofotos`

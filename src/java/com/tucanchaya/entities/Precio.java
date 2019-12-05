@@ -134,7 +134,7 @@ public class Precio implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ejemplo.modelo.Precio[ precId=" + precId + " ]";
+        return "com.tucanchaya.entities.Precio[ precId=" + precId + " ]";
     }
     
 }

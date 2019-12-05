@@ -239,6 +239,6 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "test.Usuario[ usuId=" + usuId + " ]";
+        return "com.tucanchaya.entities.Usuario[ usuId=" + usuId + " ]";
     }
 }

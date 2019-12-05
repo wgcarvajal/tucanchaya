@@ -110,7 +110,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ejemplo.modelo.Categoria[ catId=" + catId + " ]";
+        return "com.tucanchaya.entities.Categoria[ catId=" + catId + " ]";
     }
     
 }

@@ -76,6 +76,14 @@ public class Centrodeportivo implements Serializable {
     @Column(name = "cenAlto")
     private Integer cenAlto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
+    private List<Centrodeportivofotos> centrodeportivofotosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
+    private List<Centrodeportivodeporte> centrodeportivodeporteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
+    private List<Centrodeportivotelefono> centrodeportivotelefonoList;
+    @OneToMany(mappedBy = "cenId")
+    private List<Producto> productoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cenId")
     private List<Escenario> escenarioList;
     @JoinColumn(name = "barId", referencedColumnName = "barId")
     @ManyToOne(optional = false)
@@ -155,6 +163,42 @@ public class Centrodeportivo implements Serializable {
     }
 
     @XmlTransient
+    public List<Centrodeportivofotos> getCentrodeportivofotosList() {
+        return centrodeportivofotosList;
+    }
+
+    public void setCentrodeportivofotosList(List<Centrodeportivofotos> centrodeportivofotosList) {
+        this.centrodeportivofotosList = centrodeportivofotosList;
+    }
+
+    @XmlTransient
+    public List<Centrodeportivodeporte> getCentrodeportivodeporteList() {
+        return centrodeportivodeporteList;
+    }
+
+    public void setCentrodeportivodeporteList(List<Centrodeportivodeporte> centrodeportivodeporteList) {
+        this.centrodeportivodeporteList = centrodeportivodeporteList;
+    }
+
+    @XmlTransient
+    public List<Centrodeportivotelefono> getCentrodeportivotelefonoList() {
+        return centrodeportivotelefonoList;
+    }
+
+    public void setCentrodeportivotelefonoList(List<Centrodeportivotelefono> centrodeportivotelefonoList) {
+        this.centrodeportivotelefonoList = centrodeportivotelefonoList;
+    }
+
+    @XmlTransient
+    public List<Producto> getProductoList() {
+        return productoList;
+    }
+
+    public void setProductoList(List<Producto> productoList) {
+        this.productoList = productoList;
+    }
+
+    @XmlTransient
     public List<Escenario> getEscenarioList() {
         return escenarioList;
     }
@@ -178,7 +222,7 @@ public class Centrodeportivo implements Serializable {
     public void setColorId(Color colorId) {
         this.colorId = colorId;
     }
-    
+
     @XmlTransient
     public List<Usuario> getUsuarioList() {
         return usuarioList;
@@ -210,6 +254,6 @@ public class Centrodeportivo implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Centrodeportivo[ cenId=" + cenId + " ]";
+        return "com.tucanchaya.entities.Centrodeportivo[ cenId=" + cenId + " ]";
     }
 }

@@ -14,9 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -51,8 +48,10 @@ public class Deporte implements Serializable {
     @Size(min = 1, max = 150)
     @Column(name = "depNombre")
     private String depNombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deporte")
-    private List<Escenariodeporte> escenariodeporteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "depId")
+    private List<Centrodeportivodeporte> centrodeportivodeporteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "depId")
+    private List<Escenario> escenarioList;
 
     public Deporte() {
     }
@@ -83,12 +82,21 @@ public class Deporte implements Serializable {
     }
 
     @XmlTransient
-    public List<Escenariodeporte> getEscenariodeporteList() {
-        return escenariodeporteList;
+    public List<Centrodeportivodeporte> getCentrodeportivodeporteList() {
+        return centrodeportivodeporteList;
     }
 
-    public void setEscenariodeporteList(List<Escenariodeporte> escenariodeporteList) {
-        this.escenariodeporteList = escenariodeporteList;
+    public void setCentrodeportivodeporteList(List<Centrodeportivodeporte> centrodeportivodeporteList) {
+        this.centrodeportivodeporteList = centrodeportivodeporteList;
+    }
+
+    @XmlTransient
+    public List<Escenario> getEscenarioList() {
+        return escenarioList;
+    }
+
+    public void setEscenarioList(List<Escenario> escenarioList) {
+        this.escenarioList = escenarioList;
     }
 
     @Override
@@ -113,7 +121,7 @@ public class Deporte implements Serializable {
 
     @Override
     public String toString() {
-        return "test.Deporte[ depId=" + depId + " ]";
+        return "com.tucanchaya.entities.Deporte[ depId=" + depId + " ]";
     }
     
     

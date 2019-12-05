@@ -43,7 +43,7 @@ public class Centrodeportivofotos implements Serializable {
     @Basic(optional = false)
     @Column(name = "cenFotId")
     private Long cenFotId;
-    @Size(min = 1, max = 200)
+    @Size(max = 200)
     @Column(name = "cenFoNombre")
     private String cenFoNombre;
     @Basic(optional = false)
@@ -61,9 +61,8 @@ public class Centrodeportivofotos implements Serializable {
         this.cenFotId = cenFotId;
     }
 
-    public Centrodeportivofotos(Long cenFotId, String cenFoNombre, boolean cenFotPrincipal) {
+    public Centrodeportivofotos(Long cenFotId, boolean cenFotPrincipal) {
         this.cenFotId = cenFotId;
-        this.cenFoNombre = cenFoNombre;
         this.cenFotPrincipal = cenFotPrincipal;
     }
 
@@ -121,7 +120,7 @@ public class Centrodeportivofotos implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Centrodeportivofotos[ cenFotId=" + cenFotId + " ]";
+        return "com.tucanchaya.entities.Centrodeportivofotos[ cenFotId=" + cenFotId + " ]";
     }
     
 }

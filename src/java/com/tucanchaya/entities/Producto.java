@@ -55,12 +55,14 @@ public class Producto implements Serializable {
     @Size(max = 200)
     @Column(name = "prodImagen")
     private String prodImagen;
+    @JoinColumn(name = "cenId", referencedColumnName = "cenId")
+    @ManyToOne
+    private Centrodeportivo cenId;
     @JoinColumn(name = "catId", referencedColumnName = "catId")
     @ManyToOne(optional = false)
     private Categoria catId;
-    @JoinColumn(name = "cenId", referencedColumnName = "cenId")
-    @ManyToOne(optional = true)
-    private Centrodeportivo cenId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "prodId")
+    private List<Precio> precioList;
 
     public Producto() {
     }
@@ -98,6 +100,14 @@ public class Producto implements Serializable {
         this.prodImagen = prodImagen;
     }
 
+    public Centrodeportivo getCenId() {
+        return cenId;
+    }
+
+    public void setCenId(Centrodeportivo cenId) {
+        this.cenId = cenId;
+    }
+
     public Categoria getCatId() {
         return catId;
     }
@@ -106,15 +116,14 @@ public class Producto implements Serializable {
         this.catId = catId;
     }
 
-    public Centrodeportivo getCenId() {
-        return cenId;
+    @XmlTransient
+    public List<Precio> getPrecioList() {
+        return precioList;
     }
 
-    public void setCenId(Centrodeportivo cenId) {
-        this.cenId = cenId;
+    public void setPrecioList(List<Precio> precioList) {
+        this.precioList = precioList;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -138,6 +147,6 @@ public class Producto implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ejemplo.modelo.Producto[ prodId=" + prodId + " ]";
+        return "com.tucanchaya.entities.Producto[ prodId=" + prodId + " ]";
     }
 }

@@ -100,7 +100,7 @@ public class Escenariofotos implements Serializable {
 
     @Override
     public String toString() {
-        return "test.Escenariofotos[ escFotId=" + escFotId + " ]";
+        return "com.tucanchaya.entities.Escenariofotos[ escFotId=" + escFotId + " ]";
     }
     
 }
